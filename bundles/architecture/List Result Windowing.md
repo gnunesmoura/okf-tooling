@@ -24,12 +24,12 @@ tags:
 - Apply an optional `--offset` and `--limit` window to the sorted matches.
 - When no explicit window is supplied, return the full filtered match set.
 - Represent the JSON payload in `data` as an object with:
-  - `concepts`: the concept slice for the current window;
-  - `total`: total matched concepts before windowing;
-  - `returned`: number of concepts in `concepts`;
-  - `offset`: zero-based start of the current window;
-  - `limit`: requested window size or `null`;
-  - `truncated`: `true` when the current payload does not contain the full filtered match set.
+    - `concepts`: the concept slice for the current window;
+    - `total`: total matched concepts before windowing;
+    - `returned`: number of concepts in `concepts`;
+    - `offset`: zero-based start of the current window;
+    - `limit`: requested window size or `null`;
+    - `truncated`: `true` when the current payload does not contain the full filtered match set.
 
 Human output may apply a readability cap, but that cap is a presentation choice and must not alter the sorted filtered inventory used by JSON mode.
 
