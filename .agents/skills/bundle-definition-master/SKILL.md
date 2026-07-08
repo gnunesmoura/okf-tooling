@@ -17,7 +17,7 @@ Frame each subagent as working on planning or changing bundle content, not imple
 When shaping a bundle, do not read the role skills into one shared context. Instead, launch fresh subagents for each role and give each one only the question and the minimum context it needs.
 Treat each subagent as a role holder receiving a targeted brief, not as a generic helper.
 
-Use these role skills in order:
+Use these role skills in order one at a time:
 
 1. `tech-pm` to define user-facing behavior as `Feature` OKF documents.
 2. `architect` to capture structural and technical choices as `ArchitectureDecision` OKF documents.
