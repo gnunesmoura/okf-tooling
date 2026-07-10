@@ -21,7 +21,6 @@ Do not invent architecture or implementation details.
 
 ## Rules
 
-- Do not delegate work to a subagent under any circumstance.
 - Define observable behavior, not implementation internals.
 - Keep acceptance criteria concrete, testable, and user-visible.
 - Split unrelated behavior into separate features instead of bundling them together.
