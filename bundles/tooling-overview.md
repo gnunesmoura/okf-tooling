@@ -33,6 +33,6 @@ The first supported domain is OKF, focused on summarized navigation, concept inv
 
 ## Relations
 
-- [Tooling Product](product/Product%20Overview.md)
+- [Tooling Product](product/product-overview.md)
 - [Product Features](product/features/)
 - [SDD Changes](spec-driven-development/changes/)

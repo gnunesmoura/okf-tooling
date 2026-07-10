@@ -48,8 +48,8 @@ change package cannot be treated as a source of current change status.
 
 ## Documents
 
-- [Tooling Overview](Tooling%20Overview.md) - Scope and principles for `tooling`.
-- [Tooling Roadmap](Tooling%20Roadmap.md) - Product sequence and current focus.
-- [Going Open Source Roadmap](Going%20Open%20Source%20Roadmap.md) - Release and governance direction.
-- [Tooling Product](product/Product%20Overview.md) - Durable product definition.
-- [Open Knowledge Format Specification](references/Open%20Knowledge%20Format%20Specification.md) - Local OKF reference.
+- [Tooling Overview](tooling-overview.md) - Scope and principles for `tooling`.
+- [Tooling Roadmap](tooling-roadmap.md) - Product sequence and current focus.
+- [Going Open Source Roadmap](going-open-source-roadmap.md) - Release and governance direction.
+- [Tooling Product](product/product-overview.md) - Durable product definition.
+- [Open Knowledge Format Specification](references/open-knowledge-format-specification.md) - Local OKF reference.

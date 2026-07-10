@@ -48,7 +48,7 @@ The architecture keeps parsing and read-model behavior reusable across commands 
 
 ## Relations
 
-- [OKF Boundaries](OKF%20Boundaries.md)
-- [Discovery and Resolution](Discovery%20and%20Resolution.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Command Flows](Command%20Flows.md)
+- [OKF Boundaries](okf-boundaries.md)
+- [Discovery and Resolution](discovery-and-resolution.md)
+- [Data Contracts](data-contracts.md)
+- [Command Flows](command-flows.md)

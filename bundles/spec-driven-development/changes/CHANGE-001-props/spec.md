@@ -11,7 +11,7 @@ status: draft
 Add a read-only `tooling okf props` projection for the existing normalized
 frontmatter fields `type`, `title`, `description`, and `tags`. The approved
 owner is the Product Develop Team; human maintainer approval was recorded on
-2026-07-10 in the [Tooling Roadmap](../../Tooling%20Roadmap.md#approved-sdd-pilot).
+2026-07-10 in the [Tooling Roadmap](../../../tooling-roadmap.md#approved-sdd-pilot).
 
 ## Scope
 
@@ -44,21 +44,21 @@ columns and no rows. The default selection is exactly
 ## Dependencies and Context
 
 The change depends on the shared read model and output conventions in the
-[Data Contracts](../../../architecture/Data%20Contracts.md), [Output and Errors](../../../architecture/Output%20and%20Errors.md),
-and [Command Flows](../../../architecture/Command%20Flows.md). Product context is
-the [Tooling Product](../../../product/Product%20Overview.md) and
-[Summarized OKF Navigation](../../../product/features/Feature%20-%20Summarized%20OKF%20Navigation.md).
-The [OKF specification](../../references/Open%20Knowledge%20Format%20Specification.md)
-and [Going Open Source Roadmap](../../Going%20Open%20Source%20Roadmap.md) remain
+[Data Contracts](../../../architecture/data-contracts.md), [Output and Errors](../../../architecture/output-and-errors.md),
+and [Command Flows](../../../architecture/command-flows.md). Product context is
+the [Tooling Product](../../../product/product-overview.md) and
+[Summarized OKF Navigation](../../../product/features/summarized-okf-navigation.md).
+The [OKF specification](../../../references/open-knowledge-format-specification.md)
+and [Going Open Source Roadmap](../../../going-open-source-roadmap.md) remain
 constraints and context. No props PRD or feature concept exists yet.
 
 ## Related Product and Architecture Context
 
-- [Tooling Product](/product/Product%20Overview.md)
-- [Summarized OKF Navigation](/product/features/Feature%20-%20Summarized%20OKF%20Navigation.md)
-- [Data Contracts](/architecture/Data%20Contracts.md)
-- [Output and Errors](/architecture/Output%20and%20Errors.md)
-- [Command Flows](/architecture/Command%20Flows.md)
+- [Tooling Product](/product/product-overview.md)
+- [Summarized OKF Navigation](/product/features/summarized-okf-navigation.md)
+- [Data Contracts](/architecture/data-contracts.md)
+- [Output and Errors](/architecture/output-and-errors.md)
+- [Command Flows](/architecture/command-flows.md)
 
 ## Affected Source Paths
 
@@ -73,9 +73,9 @@ constraints and context. No props PRD or feature concept exists yet.
 
 ## Citations
 
-- [Open Knowledge Format Specification](/references/Open%20Knowledge%20Format%20Specification.md)
-- [Tooling Roadmap](/Tooling%20Roadmap.md)
-- [Going Open Source Roadmap](/Going%20Open%20Source%20Roadmap.md)
+- [Open Knowledge Format Specification](/references/open-knowledge-format-specification.md)
+- [Tooling Roadmap](/tooling-roadmap.md)
+- [Going Open Source Roadmap](/going-open-source-roadmap.md)
 
 ## Acceptance Criteria
 

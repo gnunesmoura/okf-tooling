@@ -117,11 +117,11 @@ Preserve shared issue codes, severity meanings, ordering, reserved-file rules, a
 
 ## Relations
 
-- [Feature - OKF Validation](../product/features/Feature%20-%20OKF%20Validation.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Command Flows](Command%20Flows.md)
-- [Output and Errors](Output%20and%20Errors.md)
-- [Discovery and Resolution](Discovery%20and%20Resolution.md)
-- [Test Strategy](Test%20Strategy.md)
-- [Tooling Roadmap](../Tooling%20Roadmap.md)
-- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)
+- [Feature - OKF Validation](../product/features/okf-validation.md)
+- [Data Contracts](data-contracts.md)
+- [Command Flows](command-flows.md)
+- [Output and Errors](output-and-errors.md)
+- [Discovery and Resolution](discovery-and-resolution.md)
+- [Test Strategy](test-strategy.md)
+- [Tooling Roadmap](../tooling-roadmap.md)
+- [Open Knowledge Format Specification](../references/open-knowledge-format-specification.md)

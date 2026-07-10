@@ -41,12 +41,12 @@ Having each semantic command scan raw bodies independently was rejected because 
 
 ## Relations
 
-- [Feature - OKF Show](../product/features/Feature%20-%20OKF%20Show.md)
-- [Feature - OKF Links](../product/features/Feature%20-%20OKF%20Links.md)
-- [Feature - OKF Backlinks](../product/features/Feature%20-%20OKF%20Backlinks.md)
-- [Feature - OKF Health](../product/features/Feature%20-%20OKF%20Health.md)
-- [OKF Boundaries](OKF%20Boundaries.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Command Flows](Command%20Flows.md)
-- [Links Command Contract](Links%20Command%20Contract.md)
-- [Health Report Contract](Health%20Report%20Contract.md)
+- [Feature - OKF Show](../product/features/okf-show.md)
+- [Feature - OKF Links](../product/features/okf-links.md)
+- [Feature - OKF Backlinks](../product/features/okf-backlinks.md)
+- [Feature - OKF Health](../product/features/okf-health.md)
+- [OKF Boundaries](okf-boundaries.md)
+- [Data Contracts](data-contracts.md)
+- [Command Flows](command-flows.md)
+- [Links Command Contract](links-command-contract.md)
+- [Health Report Contract](health-report-contract.md)

@@ -17,45 +17,45 @@
   using the artifact names and frontmatter conventions defined by `OKF-SDD.md`.
 - **Creation**: Added the reserved [SDD changes](spec-driven-development/changes/) area for future SDD
   change packages; no package or placeholder concept was created.
-- **Decision**: Recorded human approval of [CHANGE-001 — props](Tooling%20Roadmap.md#approved-sdd-pilot) as the first SDD pilot; scope remains read-only frontmatter export and no change package is created yet.
+- **Decision**: Recorded human approval of [CHANGE-001 — props](tooling-roadmap.md#approved-sdd-pilot) as the first SDD pilot; scope remains read-only frontmatter export and no change package is created yet.
 
 ## 2026-07-09
 
-- **Creation**: Added the [Going Open Source Roadmap](Going%20Open%20Source%20Roadmap.md) concept covering `props`, public project governance, package readiness, TestPyPI validation, first release, and post-release maintenance.
-- **Update**: Aligned the [Tooling Roadmap](Tooling%20Roadmap.md) with the current Git baseline: `validate` and `health` are complete, and `props` is the only remaining product feature before open-source release preparation.
+- **Creation**: Added the [Going Open Source Roadmap](going-open-source-roadmap.md) concept covering `props`, public project governance, package readiness, TestPyPI validation, first release, and post-release maintenance.
+- **Update**: Aligned the [Tooling Roadmap](tooling-roadmap.md) with the current Git baseline: `validate` and `health` are complete, and `props` is the only remaining product feature before open-source release preparation.
 
 ## 2026-07-08
 
-- **Update**: Refined the [Feature - OKF Health](features/Feature%20-%20OKF%20Health.md), [PRD - OKF Health](prds/PRD%20-%20OKF%20Health.md), and [Health Report Contract](architecture/Health%20Report%20Contract.md) bundle artifacts around the profile-based `quick` default, selected rule groups, and compact health output.
-- **Update**: Aligned the [Tooling Roadmap](Tooling%20Roadmap.md) with the created health PRD so the roadmap no longer lists `PRD - OKF Health` as a document still to create.
-- **Update**: Defined the `quick` and `full` health profiles, clarified reserved-file and signal-count scopes, extended the [Command Flows](architecture/Command%20Flows.md) note for `health`, and added health coverage to the [Test Strategy](architecture/Test%20Strategy.md).
+- **Update**: Refined the [Feature - OKF Health](product/features/okf-health.md), [PRD - OKF Health](prds/PRD%20-%20OKF%20Health.md), and [Health Report Contract](architecture/health-report-contract.md) bundle artifacts around the profile-based `quick` default, selected rule groups, and compact health output.
+- **Update**: Aligned the [Tooling Roadmap](tooling-roadmap.md) with the created health PRD so the roadmap no longer lists `PRD - OKF Health` as a document still to create.
+- **Update**: Defined the `quick` and `full` health profiles, clarified reserved-file and signal-count scopes, extended the [Command Flows](architecture/command-flows.md) note for `health`, and added health coverage to the [Test Strategy](architecture/test-strategy.md).
 
 ## 2026-07-06
 
 - **Creation**: Added the [PRD - OKF Health](prds/PRD%20-%20OKF%20Health.md) implementation requirements for the read-only `tooling okf health` command and stable health report signals.
-- **Creation**: Added the [Health Report Contract](architecture/Health%20Report%20Contract.md) architecture decision for `tooling okf health` report shape and soft health signal semantics.
-- **Creation**: Added the [Feature - OKF Health](features/Feature%20-%20OKF%20Health.md) concept for compact read-only bundle status signals after validation.
+- **Creation**: Added the [Health Report Contract](architecture/health-report-contract.md) architecture decision for `tooling okf health` report shape and soft health signal semantics.
+- **Creation**: Added the [Feature - OKF Health](product/features/okf-health.md) concept for compact read-only bundle status signals after validation.
 
 ## 2026-07-05
 
 - **Update**: Expanded `validate` planning to cover reserved `index.md` and `log.md` conformance from the local OKF specification, including the root `okf_version` exception.
-- **Creation**: Added the [Feature - OKF Validation](features/Feature%20-%20OKF%20Validation.md), [Validation Report Contract](architecture/Validation%20Report%20Contract.md), and [PRD - OKF Validation](prds/PRD%20-%20OKF%20Validation.md) bundle artifacts for the next implementation target.
-- **Update**: Advanced the [Tooling Roadmap](Tooling%20Roadmap.md) from completed `show` work to implementation-ready `validate` planning.
-- **Creation**: Added the [Feature - OKF Show](features/Feature%20-%20OKF%20Show.md) and [PRD - OKF Show](prds/PRD%20-%20OKF%20Show.md) bundle artifacts for the canonical single-concept read path.
+- **Creation**: Added the [Feature - OKF Validation](product/features/okf-validation.md), [Validation Report Contract](architecture/validation-report-contract.md), and [PRD - OKF Validation](prds/PRD%20-%20OKF%20Validation.md) bundle artifacts for the next implementation target.
+- **Update**: Advanced the [Tooling Roadmap](tooling-roadmap.md) from completed `show` work to implementation-ready `validate` planning.
+- **Creation**: Added the [Feature - OKF Show](product/features/okf-show.md) and [PRD - OKF Show](prds/PRD%20-%20OKF%20Show.md) bundle artifacts for the canonical single-concept read path.
 - **Update**: Kept `show` within the existing `Output and Errors` architecture boundary and added the end-of-output `Issues` rule for human mode.
 
 ## 2026-07-04
 
 - **Update**: Audited the OKF bundle docs against the local spec, reconciled the `links` and `backlinks` feature guidance, and verified internal references.
-- **Creation**: Added the [PRD - OKF Links](prds/PRD%20-%20OKF%20Links.md) and [Links Command Contract](architecture/Links%20Command%20Contract.md) bundle artifacts for outbound link discovery.
+- **Creation**: Added the [PRD - OKF Links](prds/PRD%20-%20OKF%20Links.md) and [Links Command Contract](architecture/links-command-contract.md) bundle artifacts for outbound link discovery.
 - **Update**: Tightened the OKF concept list definitions so invalid pagination is rejected and human list output exposes bundle-relative paths.
 - **Update**: Split the OKF read model into dedicated reader and listing modules so `list` no longer depends on `tree` for shared inventory behavior.
 - **Update**: Extracted shared OKF bundle resolution into a dedicated module so `tree`, `list`, and future commands reuse the same discovery and ambiguity rules.
 - **Update**: Finalized the [PRD - OKF Concept List](prds/PRD%20-%20OKF%20Concept%20List.md) for concept inventory, exact-match filters, and bounded browsing.
-- **Creation**: Added the [Feature - OKF Concept List](features/Feature%20-%20OKF%20Concept%20List.md) concept and aligned the list contract to concepts only.
+- **Creation**: Added the [Feature - OKF Concept List](product/features/okf-concept-list.md) concept and aligned the list contract to concepts only.
 - **Update**: Tightened the architecture bundle with explicit discovery, resolution, output, and error contracts after council review.
 - **Creation**: Added the [Architecture](architecture/) bundle to capture the initial `tooling` library and CLI decisions.
-- **Creation**: Added [Open Knowledge Format Specification](references/Open%20Knowledge%20Format%20Specification.md) as a local reference for the tooling bundle.
+- **Creation**: Added [Open Knowledge Format Specification](references/open-knowledge-format-specification.md) as a local reference for the tooling bundle.
 - **Update**: Aligned the early architecture guidance and PRDs around a Phase 1 reading MVP and kept the `tooling` knowledge bundle in English.
 - **Update**: Translated the `tooling` knowledge bundle to English and renamed documents, folders, and internal links accordingly.
 - **Historical**: Earlier prompt artifacts were removed after the change-package workflow made explicit task and agent-contract documents the operational source for implementation work.

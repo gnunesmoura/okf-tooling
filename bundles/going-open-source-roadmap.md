@@ -103,10 +103,10 @@ Acceptance criteria:
 
 Related contracts:
 
-- [Data Contracts](architecture/Data%20Contracts.md)
-- [Output and Errors](architecture/Output%20and%20Errors.md)
-- [Test Strategy](architecture/Test%20Strategy.md)
-- [Discovery and Resolution](architecture/Discovery%20and%20Resolution.md)
+- [Data Contracts](architecture/data-contracts.md)
+- [Output and Errors](architecture/output-and-errors.md)
+- [Test Strategy](architecture/test-strategy.md)
+- [Discovery and Resolution](architecture/discovery-and-resolution.md)
 
 ### Phase 3 - Make the Repository Publicly Governable
 
@@ -221,10 +221,10 @@ Do not publish the first public release if any of these are false:
 
 ## Relations
 
-- [Tooling Overview](Tooling%20Overview.md)
-- [Tooling Roadmap](Tooling%20Roadmap.md)
-- [Tooling Product](product/Product%20Overview.md)
+- [Tooling Overview](tooling-overview.md)
+- [Tooling Roadmap](tooling-roadmap.md)
+- [Tooling Product](product/product-overview.md)
 - [Product Features](product/features/)
 - [SDD Changes](spec-driven-development/changes/)
-- [Architecture Overview](architecture/Architecture%20Overview.md)
-- [Test Strategy](architecture/Test%20Strategy.md)
+- [Architecture Overview](architecture/architecture-overview.md)
+- [Test Strategy](architecture/test-strategy.md)

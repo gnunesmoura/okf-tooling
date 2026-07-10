@@ -10,11 +10,11 @@ status: draft
 
 ## Related Product and Architecture Context
 
-- [Tooling Product](/product/Product%20Overview.md)
-- [Summarized OKF Navigation](/product/features/Feature%20-%20Summarized%20OKF%20Navigation.md)
-- [Data Contracts](/architecture/Data%20Contracts.md)
-- [Output and Errors](/architecture/Output%20and%20Errors.md)
-- [Command Flows](/architecture/Command%20Flows.md)
+- [Tooling Product](/product/product-overview.md)
+- [Summarized OKF Navigation](/product/features/summarized-okf-navigation.md)
+- [Data Contracts](/architecture/data-contracts.md)
+- [Output and Errors](/architecture/output-and-errors.md)
+- [Command Flows](/architecture/command-flows.md)
 
 ## Affected Source Paths
 
@@ -29,9 +29,9 @@ status: draft
 
 ## Citations
 
-- [Open Knowledge Format Specification](/references/Open%20Knowledge%20Format%20Specification.md)
-- [Tooling Roadmap](/Tooling%20Roadmap.md)
-- [Going Open Source Roadmap](/Going%20Open%20Source%20Roadmap.md)
+- [Open Knowledge Format Specification](/references/open-knowledge-format-specification.md)
+- [Tooling Roadmap](/tooling-roadmap.md)
+- [Going Open Source Roadmap](/going-open-source-roadmap.md)
 
 These tasks are planned only. None is complete until its stated evidence is
 recorded during the implementation lifecycle.

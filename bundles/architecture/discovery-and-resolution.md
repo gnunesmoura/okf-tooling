@@ -76,8 +76,8 @@ Command-specific discovery and fallback resolution were rejected because they wo
 
 ## Relations
 
-- [Architecture Overview](Architecture%20Overview.md)
-- [OKF Boundaries](OKF%20Boundaries.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Command Flows](Command%20Flows.md)
-- [Output and Errors](Output%20and%20Errors.md)
+- [Architecture Overview](architecture-overview.md)
+- [OKF Boundaries](okf-boundaries.md)
+- [Data Contracts](data-contracts.md)
+- [Command Flows](command-flows.md)
+- [Output and Errors](output-and-errors.md)

@@ -50,8 +50,8 @@ Command flows may compose shared resolver, inventory, semantic-analysis, and ser
 
 ## Relations
 
-- [Architecture Overview](Architecture%20Overview.md)
-- [Discovery and Resolution](Discovery%20and%20Resolution.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Output and Errors](Output%20and%20Errors.md)
-- [Test Strategy](Test%20Strategy.md)
+- [Architecture Overview](architecture-overview.md)
+- [Discovery and Resolution](discovery-and-resolution.md)
+- [Data Contracts](data-contracts.md)
+- [Output and Errors](output-and-errors.md)
+- [Test Strategy](test-strategy.md)

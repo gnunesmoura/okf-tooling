@@ -77,10 +77,10 @@ Provide one reliable command for opening a single OKF concept in a bundle, keepi
 
 ## Relations
 
-- [Discovery and Resolution](../architecture/Discovery%20and%20Resolution.md)
-- [Command Flows](../architecture/Command%20Flows.md)
-- [Output and Errors](../architecture/Output%20and%20Errors.md)
-- [Test Strategy](../architecture/Test%20Strategy.md)
-- [Feature - Summarized OKF Navigation](Feature%20-%20Summarized%20OKF%20Navigation.md)
-- [Feature - OKF Concept List](Feature%20-%20OKF%20Concept%20List.md)
-- [Feature - OKF Backlinks](Feature%20-%20OKF%20Backlinks.md)
+- [Discovery and Resolution](../../architecture/discovery-and-resolution.md)
+- [Command Flows](../../architecture/command-flows.md)
+- [Output and Errors](../../architecture/output-and-errors.md)
+- [Test Strategy](../../architecture/test-strategy.md)
+- [Feature - Summarized OKF Navigation](summarized-okf-navigation.md)
+- [Feature - OKF Concept List](okf-concept-list.md)
+- [Feature - OKF Backlinks](okf-backlinks.md)

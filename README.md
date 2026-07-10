@@ -67,7 +67,7 @@ claim to be published on PyPI or another package index.
 Run the command from the repository root and provide a bundle path explicitly:
 
 ```bash
-tooling okf tree tooling/bundles --depth 2 --summary
+tooling okf tree bundles --depth 2 --summary
 ```
 
 The documented human-readable result is a compact directory view with counts,
@@ -84,10 +84,10 @@ Use the other MVP commands to narrow the reading journey:
 
 ```bash
 # Inventory concepts of one type.
-tooling okf list tooling/bundles --type PRD
+tooling okf list bundles --type ArchitectureContract
 
 # Read one concept by its bundle-relative path or concept id.
-tooling okf show tooling/bundles prds/PRD\ -\ OKF\ Module
+tooling okf show bundles architecture/data-contracts
 ```
 
 The exact counts and concept names depend on the bundle contents. The examples
@@ -99,7 +99,7 @@ Every documented MVP command accepts a bundle as either a relative or absolute
 path:
 
 ```bash
-tooling okf tree ./tooling/bundles --depth 2 --summary
+tooling okf tree ./bundles --depth 2 --summary
 tooling okf tree /absolute/path/to/bundle --depth 2 --summary
 ```
 
@@ -107,7 +107,7 @@ When `<bundle>` is omitted, the documented discovery order is:
 
 1. The current directory, when it looks like an OKF bundle.
 2. An `artifacts/` subdirectory, when present.
-3. A `tooling/bundles/` subdirectory when called from this repository root.
+3. A `bundles/` subdirectory when called from this repository root.
 
 If more than one candidate is found, the command should fail with the
 candidates and an explicit reference command for each one. Use an explicit
@@ -116,7 +116,7 @@ path to remove the ambiguity:
 ```text
 More than one OKF bundle found. Provide the path explicitly:
 - artifacts/ -> tooling okf tree artifacts --depth 2 --summary
-- tooling/bundles/ -> tooling okf tree tooling/bundles --depth 2 --summary
+- bundles/ -> tooling okf tree bundles --depth 2 --summary
 ```
 
 ## Output
@@ -125,9 +125,9 @@ Human-readable output is the default and is intended for interactive reading.
 Use `--json` when a skill or script needs structured output:
 
 ```bash
-tooling okf tree tooling/bundles --depth 2 --summary --json
-tooling okf list tooling/bundles --type PRD --json
-tooling okf show tooling/bundles prds/PRD\ -\ OKF\ Module --json
+tooling okf tree bundles --depth 2 --summary --json
+tooling okf list bundles --type ArchitectureContract --json
+tooling okf show bundles architecture/data-contracts --json
 ```
 
 The product requirements define JSON as a stable machine-readable interface.
@@ -166,12 +166,16 @@ The product and architecture knowledge for this tool is stored as OKF content
 under [`bundles/`](bundles/). External users should start with this README;
 the following documents are primarily for maintainers and contributors:
 
-- [Tooling Overview](bundles/Tooling%20Overview.md)
-- [PRD - Python Tooling Library and CLI](bundles/prds/PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md)
-- [PRD - OKF Module](bundles/prds/PRD%20-%20OKF%20Module.md)
+- [Bundle index](bundles/index.md) - Entry point for the knowledge bundle.
+- [Tooling Overview](bundles/tooling-overview.md) - Product scope and principles.
+- [Tooling Roadmap](bundles/tooling-roadmap.md) - Current product sequence.
+- [Product concepts](bundles/product/index.md) - Product definition and features.
+- [Architecture concepts](bundles/architecture/index.md) - Technical direction and contracts.
+- [OKF reference](bundles/references/index.md) - Local Open Knowledge Format specification.
+- [SDD documentation](bundles/spec-driven-development/index.md) - Change packages, guides, policies, and templates.
 
-The PRDs describe product intent and roadmap status; they are not a substitute
-for verifying the behavior of a particular checkout.
+These documents describe product intent and technical context; they are not a
+substitute for verifying the behavior of a particular checkout.
 
 ## Contributing and licensing
 

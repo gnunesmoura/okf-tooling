@@ -50,9 +50,9 @@ Use the shared read model, semantic normalization, issue channel, and JSON envel
 
 ## Relations
 
-- [Feature - OKF Links](../product/features/Feature%20-%20OKF%20Links.md)
-- [Feature - OKF Backlinks](../product/features/Feature%20-%20OKF%20Backlinks.md)
-- [Command Flows](Command%20Flows.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Output and Errors](Output%20and%20Errors.md)
-- [Test Strategy](Test%20Strategy.md)
+- [Feature - OKF Links](../product/features/okf-links.md)
+- [Feature - OKF Backlinks](../product/features/okf-backlinks.md)
+- [Command Flows](command-flows.md)
+- [Data Contracts](data-contracts.md)
+- [Output and Errors](output-and-errors.md)
+- [Test Strategy](test-strategy.md)

@@ -132,8 +132,8 @@ Preserve unknown frontmatter fields in `frontmatter`, keep reserved files outsid
 
 ## Relations
 
-- [Architecture Overview](Architecture%20Overview.md)
-- [OKF Boundaries](OKF%20Boundaries.md)
-- [Discovery and Resolution](Discovery%20and%20Resolution.md)
-- [Output and Errors](Output%20and%20Errors.md)
-- [List Result Windowing](List%20Result%20Windowing.md)
+- [Architecture Overview](architecture-overview.md)
+- [OKF Boundaries](okf-boundaries.md)
+- [Discovery and Resolution](discovery-and-resolution.md)
+- [Output and Errors](output-and-errors.md)
+- [List Result Windowing](list-result-windowing.md)

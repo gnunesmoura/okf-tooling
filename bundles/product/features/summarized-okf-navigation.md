@@ -59,4 +59,4 @@ A skill should start with this feature to understand the bundle structure. After
 
 ## Relations
 
-- [Tooling Overview](../Tooling%20Overview.md)
+- [Tooling Overview](../../tooling-overview.md)

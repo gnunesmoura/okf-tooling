@@ -70,9 +70,9 @@ Help people, scripts, and skills answer one question for a resolved concept: whi
 
 ## Relations
 
-- [Discovery and Resolution](../architecture/Discovery%20and%20Resolution.md)
-- [Command Flows](../architecture/Command%20Flows.md)
-- [Data Contracts](../architecture/Data%20Contracts.md)
-- [Output and Errors](../architecture/Output%20and%20Errors.md)
-- [Test Strategy](../architecture/Test%20Strategy.md)
-- [Feature - OKF Links](Feature%20-%20OKF%20Links.md)
+- [Discovery and Resolution](../../architecture/discovery-and-resolution.md)
+- [Command Flows](../../architecture/command-flows.md)
+- [Data Contracts](../../architecture/data-contracts.md)
+- [Output and Errors](../../architecture/output-and-errors.md)
+- [Test Strategy](../../architecture/test-strategy.md)
+- [Feature - OKF Links](okf-links.md)

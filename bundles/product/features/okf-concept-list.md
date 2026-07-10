@@ -85,5 +85,5 @@ The command gives scripts and agents a fast way to answer:
 
 ## Relations
 
-- [List Command Contract](../architecture/List%20Command%20Contract.md)
-- [Feature - Summarized OKF Navigation](Feature%20-%20Summarized%20OKF%20Navigation.md)
+- [List Command Contract](../../architecture/list-command-contract.md)
+- [Feature - Summarized OKF Navigation](summarized-okf-navigation.md)

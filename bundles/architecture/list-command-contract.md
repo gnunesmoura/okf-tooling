@@ -58,9 +58,9 @@ The result contains only concepts, is sorted by `concept_id`, applies filters be
 
 ## Compatibility Rules
 
-Keep the shared envelope, read-model concept fields, exact-match filter semantics, and window metadata compatible with [List Result Windowing](List%20Result%20Windowing.md).
+Keep the shared envelope, read-model concept fields, exact-match filter semantics, and window metadata compatible with [List Result Windowing](list-result-windowing.md).
 
 ## Relations
 
-- [Feature - OKF Concept List](../product/features/Feature%20-%20OKF%20Concept%20List.md)
-- [List Result Windowing](List%20Result%20Windowing.md)
+- [Feature - OKF Concept List](../product/features/okf-concept-list.md)
+- [List Result Windowing](list-result-windowing.md)

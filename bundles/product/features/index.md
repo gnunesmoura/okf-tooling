@@ -10,10 +10,10 @@ execution status of a current change.
 
 ## OKF Features
 
-- [Feature - Summarized OKF Navigation](Feature%20-%20Summarized%20OKF%20Navigation.md) - Guide for the first summarized tree reading journey.
-- [Feature - OKF Concept List](Feature%20-%20OKF%20Concept%20List.md) - Plan for the concept inventory command and its filters.
-- [Feature - OKF Show](Feature%20-%20OKF%20Show.md) - Plan for the canonical single-concept read path.
-- [Feature - OKF Validation](Feature%20-%20OKF%20Validation.md) - Plan for non-blocking OKF bundle conformance reporting.
-- [Feature - OKF Health](Feature%20-%20OKF%20Health.md) - Plan for compact OKF bundle status signals after validation.
-- [Feature - OKF Links](Feature%20-%20OKF%20Links.md) - Plan for outbound link discovery and classification.
-- [Feature - OKF Backlinks](Feature%20-%20OKF%20Backlinks.md) - Plan for the concept inbound reference command.
+- [Feature - Summarized OKF Navigation](summarized-okf-navigation.md) - Guide for the first summarized tree reading journey.
+- [Feature - OKF Concept List](okf-concept-list.md) - Plan for the concept inventory command and its filters.
+- [Feature - OKF Show](okf-show.md) - Plan for the canonical single-concept read path.
+- [Feature - OKF Validation](okf-validation.md) - Plan for non-blocking OKF bundle conformance reporting.
+- [Feature - OKF Health](okf-health.md) - Plan for compact OKF bundle status signals after validation.
+- [Feature - OKF Links](okf-links.md) - Plan for outbound link discovery and classification.
+- [Feature - OKF Backlinks](okf-backlinks.md) - Plan for the concept inbound reference command.

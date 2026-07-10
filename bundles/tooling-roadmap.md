@@ -50,12 +50,12 @@ mixed frontmatter, stable ordering, and regression tests while reusing the
 shared read model and output conventions.
 
 Non-goals are bundle mutation, a new property schema, new `props` concepts,
-and release-governance work. Confirmed context: [Tooling Product](product/Product%20Overview.md),
-[Data Contracts](architecture/Data%20Contracts.md),
-[Output and Errors](architecture/Output%20and%20Errors.md), [Command Flows](architecture/Command%20Flows.md),
-[Feature - Summarized OKF Navigation](product/features/Feature%20-%20Summarized%20OKF%20Navigation.md),
-[Open Knowledge Format Specification](references/Open%20Knowledge%20Format%20Specification.md),
-[Tooling Roadmap](Tooling%20Roadmap.md), and [Going Open Source Roadmap](Going%20Open%20Source%20Roadmap.md).
+and release-governance work. Confirmed context: [Tooling Product](product/product-overview.md),
+[Data Contracts](architecture/data-contracts.md),
+[Output and Errors](architecture/output-and-errors.md), [Command Flows](architecture/command-flows.md),
+[Feature - Summarized OKF Navigation](product/features/summarized-okf-navigation.md),
+[Open Knowledge Format Specification](references/open-knowledge-format-specification.md),
+[Tooling Roadmap](tooling-roadmap.md), and [Going Open Source Roadmap](going-open-source-roadmap.md).
 No change package or implementation is created by this selection.
 
 ## Product Spine
@@ -100,14 +100,14 @@ plan, tasks, acceptance tests, and agent contract.
 
 ## Relations
 
-- [Tooling Overview](Tooling%20Overview.md)
+- [Tooling Overview](tooling-overview.md)
 - [Product](product/)
 - [Product Features](product/features/)
 - [SDD Changes](spec-driven-development/changes/)
-- [Discovery and Resolution](architecture/Discovery%20and%20Resolution.md)
-- [Data Contracts](architecture/Data%20Contracts.md)
-- [Command Flows](architecture/Command%20Flows.md)
-- [Output and Errors](architecture/Output%20and%20Errors.md)
-- [Validation Report Contract](architecture/Validation%20Report%20Contract.md)
-- [Test Strategy](architecture/Test%20Strategy.md)
-- [Incremental Plan and Risks](architecture/Incremental%20Plan%20and%20Risks.md)
+- [Discovery and Resolution](architecture/discovery-and-resolution.md)
+- [Data Contracts](architecture/data-contracts.md)
+- [Command Flows](architecture/command-flows.md)
+- [Output and Errors](architecture/output-and-errors.md)
+- [Validation Report Contract](architecture/validation-report-contract.md)
+- [Test Strategy](architecture/test-strategy.md)
+- [Incremental Plan and Risks](architecture/incremental-plan-and-risks.md)

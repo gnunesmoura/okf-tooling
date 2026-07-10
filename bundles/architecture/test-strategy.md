@@ -54,8 +54,8 @@ Tests should prove observable reader and command behavior at the smallest releva
 
 ## Relations
 
-- [Architecture Overview](Architecture%20Overview.md)
-- [Data Contracts](Data%20Contracts.md)
-- [Command Flows](Command%20Flows.md)
-- [Output and Errors](Output%20and%20Errors.md)
-- [Incremental Plan and Risks](Incremental%20Plan%20and%20Risks.md)
+- [Architecture Overview](architecture-overview.md)
+- [Data Contracts](data-contracts.md)
+- [Command Flows](command-flows.md)
+- [Output and Errors](output-and-errors.md)
+- [Incremental Plan and Risks](incremental-plan-and-risks.md)

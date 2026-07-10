@@ -117,12 +117,12 @@ Provide a read-only `validate` command that reports OKF bundle conformance issue
 
 ## Relations
 
-- [Tooling Roadmap](../Tooling%20Roadmap.md)
-- [Validation Report Contract](../architecture/Validation%20Report%20Contract.md)
-- [Discovery and Resolution](../architecture/Discovery%20and%20Resolution.md)
-- [Data Contracts](../architecture/Data%20Contracts.md)
-- [Command Flows](../architecture/Command%20Flows.md)
-- [Output and Errors](../architecture/Output%20and%20Errors.md)
-- [Test Strategy](../architecture/Test%20Strategy.md)
-- [Feature - OKF Show](Feature%20-%20OKF%20Show.md)
-- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)
+- [Tooling Roadmap](../../tooling-roadmap.md)
+- [Validation Report Contract](../../architecture/validation-report-contract.md)
+- [Discovery and Resolution](../../architecture/discovery-and-resolution.md)
+- [Data Contracts](../../architecture/data-contracts.md)
+- [Command Flows](../../architecture/command-flows.md)
+- [Output and Errors](../../architecture/output-and-errors.md)
+- [Test Strategy](../../architecture/test-strategy.md)
+- [Feature - OKF Show](okf-show.md)
+- [Open Knowledge Format Specification](../../references/open-knowledge-format-specification.md)

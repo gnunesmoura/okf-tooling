@@ -11,4 +11,4 @@ or current change execution state.
 
 ## Documents
 
-- [Open Knowledge Format Specification](Open%20Knowledge%20Format%20Specification.md) - Local copy of the OKF v0.1 draft specification used by the tooling requirements and architecture.
+- [Open Knowledge Format Specification](open-knowledge-format-specification.md) - Local copy of the OKF v0.1 draft specification used by the tooling requirements and architecture.
