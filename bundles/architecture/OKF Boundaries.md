@@ -10,30 +10,51 @@ tags:
 
 # OKF Boundaries
 
-## Library
+## Context
+
+The architecture separates reusable OKF reading from CLI concerns so the local MVP remains small while its read model and contracts can support later commands. These boundaries are authoritative for ownership and prohibited cross-layer behavior.
+
+## Decision
+
+### Library
 
 Own the domain model, bundle discovery, identity normalization, inventory, parsing, query resolution, and issue aggregation.
 
-## CLI
+### CLI
 
 Own command parsing, exit codes, user-facing formatting, and JSON selection.
 
-## Models
+### Models
 
 Keep typed contracts only. Do not read files or format output in model classes.
 
-## Discovery
+### Discovery
 
 Find a bundle from an explicit path or from the current directory using a small, deterministic search order. Discovery must produce one root or one ambiguity error, never an implied fallback.
 
-## Parsing
+### Parsing
 
 Read YAML frontmatter and markdown bodies permissively. Do not reject bundles because of unknown keys or unknown `type` values. Preserve raw frontmatter separately from normalized fields.
 
-## Serialization
+### Serialization
 
 Centralize stable human and JSON output. Do not let commands invent their own JSON shapes or sort rules.
 
-## Errors
+### Errors
 
 Use a single envelope for fatal command failures. Keep tolerated content problems as `Issue` records attached to the read model. The envelope must be shared by all commands.
+
+## Consequences
+
+Commands stay thin, domain behavior remains reusable, and tolerated content issues can travel through the same read model without being turned into command-specific failures.
+
+## Alternatives Considered
+
+Letting command handlers own parsing, discovery, and output was rejected because it would duplicate rules and make contracts diverge.
+
+## Relations
+
+- [Architecture Overview](Architecture%20Overview.md)
+- [Discovery and Resolution](Discovery%20and%20Resolution.md)
+- [Data Contracts](Data%20Contracts.md)
+- [Output and Errors](Output%20and%20Errors.md)

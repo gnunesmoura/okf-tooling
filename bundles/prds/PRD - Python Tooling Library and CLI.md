@@ -78,7 +78,6 @@ tooling/
     log.md
     prds/
     features/
-    prompts/
   pyproject.toml
   src/tooling/
     __init__.py
@@ -278,7 +277,7 @@ Minimum entities:
 - Avoid depending on Obsidian while supporting wikilink syntax in the later links phase.
 - Keep the package in its own directory to simplify removal or future extraction.
 - Avoid reverse imports from `tooling` into business-specific scripts.
-- Maintain an OKF bundle in `tooling/bundles/` with guides, PRDs, features, prompts, and tooling decisions.
+- Maintain an OKF bundle in `tooling/bundles/` with guides, PRDs, features, references, and tooling decisions.
 
 ## Future Extraction Strategy
 

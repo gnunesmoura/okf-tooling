@@ -10,13 +10,19 @@ tags:
 
 # Discovery and Resolution
 
-## Shared Resolver
+## Context
+
+Bundle discovery and target lookup are shared concerns for every command that reads an OKF bundle. This document is authoritative for candidate selection, ambiguity handling, target precedence, and bundle-relative identity normalization.
+
+## Decision
+
+### Shared Resolver
 
 The CLI should use one shared bundle resolution path for `tree`, `list`, `show`, and future OKF commands.
 
 Keep the discovery rules, ambiguity formatting, and bundle-relative path normalization in the shared resolver instead of reimplementing them in command handlers.
 
-## Bundle Discovery
+### Bundle Discovery
 
 When `<bundle>` is provided, treat it as a path to a bundle root directory and resolve it relative to the current working directory when needed.
 
@@ -46,7 +52,7 @@ More than one OKF bundle found. Provide the path explicitly:
 
 Use a stable error code for this condition, such as `OKF_DISCOVERY_AMBIGUOUS`.
 
-## Show Resolution
+### Show Resolution
 
 `show` should resolve targets in this order:
 
@@ -56,6 +62,22 @@ Use a stable error code for this condition, such as `OKF_DISCOVERY_AMBIGUOUS`.
 
 If a target still cannot be resolved, return a single not-found error for that target rather than falling back to a different interpretation.
 
-## Normalization
+### Normalization
 
 Normalize all bundle-relative paths with `/` separators, derive `concept_id` from the relative file path without `.md`, and use the normalized identity everywhere the CLI renders or compares concepts.
+
+## Consequences
+
+All commands use the same deterministic bundle and concept identity rules, so an ambiguous discovery result or target lookup cannot silently resolve differently by command.
+
+## Alternatives Considered
+
+Command-specific discovery and fallback resolution were rejected because they would produce inconsistent candidates, target precedence, and rendered identities.
+
+## Relations
+
+- [Architecture Overview](Architecture%20Overview.md)
+- [OKF Boundaries](OKF%20Boundaries.md)
+- [Data Contracts](Data%20Contracts.md)
+- [Command Flows](Command%20Flows.md)
+- [Output and Errors](Output%20and%20Errors.md)

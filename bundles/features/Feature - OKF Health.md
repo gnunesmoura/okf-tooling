@@ -93,6 +93,7 @@ Help people, scripts, and agents quickly understand whether an OKF bundle is usa
 - [Tooling Roadmap](../Tooling%20Roadmap.md)
 - [PRD - OKF Module](../prds/PRD%20-%20OKF%20Module.md)
 - [PRD - OKF Health](../prds/PRD%20-%20OKF%20Health.md)
+- [PRD - OKF Semantic Analysis Boundary](../prds/PRD%20-%20OKF%20Semantic%20Analysis%20Boundary.md)
 - [PRD - OKF Validation](../prds/PRD%20-%20OKF%20Validation.md)
 - [PRD - OKF Links](../prds/PRD%20-%20OKF%20Links.md)
 - [Discovery and Resolution](../architecture/Discovery%20and%20Resolution.md)
@@ -105,3 +106,4 @@ Help people, scripts, and agents quickly understand whether an OKF bundle is usa
 - [Feature - OKF Validation](Feature%20-%20OKF%20Validation.md)
 - [Feature - OKF Links](Feature%20-%20OKF%20Links.md)
 - [Feature - OKF Backlinks](Feature%20-%20OKF%20Backlinks.md)
+- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)

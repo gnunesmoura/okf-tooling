@@ -72,6 +72,8 @@ Help people, scripts, and skills answer one question for a resolved concept: whi
 
 - [PRD - Python Tooling Library and CLI](../prds/PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md)
 - [PRD - OKF Module](../prds/PRD%20-%20OKF%20Module.md)
+- [PRD - OKF Links](../prds/PRD%20-%20OKF%20Links.md)
+- [PRD - OKF Semantic Analysis Boundary](../prds/PRD%20-%20OKF%20Semantic%20Analysis%20Boundary.md)
 - [Discovery and Resolution](../architecture/Discovery%20and%20Resolution.md)
 - [Command Flows](../architecture/Command%20Flows.md)
 - [Data Contracts](../architecture/Data%20Contracts.md)

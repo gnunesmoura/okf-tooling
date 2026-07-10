@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureGuidance
 title: Test Strategy
 description: Defines the minimum fixture set and test coverage for the MVP.
 tags:
@@ -10,7 +10,13 @@ tags:
 
 # Test Strategy
 
-## Minimum Fixtures
+## Purpose
+
+This guidance defines the minimum fixture and coverage boundaries that demonstrate the architecture contracts for the MVP and its documented read-only extensions.
+
+## Operating Rules
+
+### Minimum Fixtures
 
 - a valid nested bundle with `index.md`, `log.md`, and multiple concepts
 - an ambiguous setup with two candidate bundles
@@ -20,7 +26,7 @@ tags:
 - a readable bundle fixture for `health` with valid inventory, reserved files, internal links, and a concept containing code blocks and inline code spans
 - a readable bundle fixture for `health` with missing optional metadata, missing `index.md`, stale logs, and an external link without a detectable citations section
 
-## Coverage
+### Coverage
 
 - discovery with and without an explicit bundle path
 - ambiguity failure with candidate commands
@@ -38,6 +44,18 @@ tags:
 - health ignoring links and headings inside fenced code blocks and inline code spans
 - health deterministic JSON and human output ordering
 
-## Rule
+### Regression Rule
 
 If a bug fix changes the read model or command output, add a regression test in the smallest relevant scope.
+
+## Boundaries
+
+Tests should prove observable reader and command behavior at the smallest relevant layer; they should not require network access, external services, or implementation-specific duplication of the contracts.
+
+## Relations
+
+- [Architecture Overview](Architecture%20Overview.md)
+- [Data Contracts](Data%20Contracts.md)
+- [Command Flows](Command%20Flows.md)
+- [Output and Errors](Output%20and%20Errors.md)
+- [Incremental Plan and Risks](Incremental%20Plan%20and%20Risks.md)

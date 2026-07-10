@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureGuidance
 title: Incremental Plan and Risks
 description: Gives the implementation order for the MVP and the main risks to watch.
 tags:
@@ -10,7 +10,15 @@ tags:
 
 # Incremental Plan and Risks
 
-## Plan
+## Purpose
+
+This guidance sets the smallest implementation sequence for the architecture and identifies risks that can undermine shared contracts or deterministic behavior.
+
+## Operating Rules
+
+Follow the sequence below so shared identity, read-model, and issue behavior are established before relationship commands and presentation layers depend on them.
+
+### Plan
 
 1. Freeze the shared read model and resolver contracts first: bundle discovery, concept identity normalization, issue handling, and `show` target precedence.
 2. Implement permissive parsing and bundle inventory so the library can read concepts once and reuse the same model across commands.
@@ -29,6 +37,10 @@ tags:
 - Link extraction is easy to overbuild, so it should stay as a small projection over the existing inventory.
 - Backlinks can drift from outbound links if they do not share the same normalized link records.
 - `show` can become coupled to link traversal if its target-resolution contract is not kept separate from relationship commands.
+
+## Boundaries
+
+The plan covers read-only local bundle behavior and its tests. It does not introduce write, repair, network, database, or external-service behavior, and it does not make future commands available before their contracts are implemented.
 
 ## Relations
 

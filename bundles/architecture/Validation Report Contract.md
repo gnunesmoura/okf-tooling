@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureContract
 title: Validation Report Contract
 description: Defines the read-only validation report payload, ordering, and pass/fail semantics for `tooling okf validate`.
 tags:
@@ -11,7 +11,7 @@ tags:
 
 # Validation Report Contract
 
-## Context
+## Scope and Context
 
 `validate` should report OKF bundle conformance using the shared resolver, read model, issue fields, and JSON envelope. It should not introduce a stricter parser, a second scan model, write behavior, or command-specific issue semantics.
 
@@ -21,7 +21,7 @@ The specification also defines one narrow frontmatter exception: a bundle-root `
 
 For concept candidates, the OKF contract requires top-of-file YAML frontmatter. A non-reserved `.md` file without that frontmatter is a validation error, not a warning or informational issue.
 
-## Decision
+## Payload and Behavior Contract
 
 `tooling okf validate` is a read-only report over the existing bundle read result.
 
@@ -93,6 +93,10 @@ Process failure is reserved for transport and execution failures, including unre
 - Future `health` work can aggregate validation outcomes without redefining issue semantics.
 - The report is intentionally small; richer diagnostics belong in issue records, not in a second validation-specific schema.
 
+## Invariants
+
+Validation remains read-only and projects the shared read result into the common envelope; `data` contains summary fields only, while the top-level `issues` array remains authoritative for individual validation issues.
+
 ## Alternatives Considered
 
 A stricter validation parser was rejected because it would create different behavior from `tree`, `list`, `show`, and `links`.
@@ -107,6 +111,10 @@ Putting validation issues inside `data` was rejected because `Output and Errors`
 
 Failing the process for readable bundles with content errors was rejected because the OKF read model is intentionally permissive and exposes tolerated issues without blocking consumption.
 
+## Compatibility Rules
+
+Preserve shared issue codes, severity meanings, ordering, reserved-file rules, and envelope placement so validation can be consumed alongside `health` without redefining conformance.
+
 ## Relations
 
 - [Feature - OKF Validation](../features/Feature%20-%20OKF%20Validation.md)
@@ -118,3 +126,4 @@ Failing the process for readable bundles with content errors was rejected becaus
 - [Discovery and Resolution](Discovery%20and%20Resolution.md)
 - [Test Strategy](Test%20Strategy.md)
 - [Tooling Roadmap](../Tooling%20Roadmap.md)
+- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)

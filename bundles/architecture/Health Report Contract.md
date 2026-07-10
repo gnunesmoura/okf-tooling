@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureContract
 title: Health Report Contract
 description: Defines the profile-based read-only health report payload and soft signal semantics for `tooling okf health`.
 tags:
@@ -11,7 +11,7 @@ tags:
 
 # Health Report Contract
 
-## Context
+## Scope and Context
 
 `health` should give a compact status view for one OKF bundle without becoming a second validator, crawler, fixer, or scoring system. It depends on the shared resolver, shared read model, shared issue contract, shared JSON envelope, and the validation report semantics already defined for readable bundles. The command is profile-based so the default view stays short while broader quality groups remain opt-in.
 
@@ -21,7 +21,7 @@ The OKF specification separates required conformance from soft quality guidance.
 
 Health therefore needs to expose useful quality signals while preserving the permissive OKF consumption model.
 
-## Decision
+## Payload and Behavior Contract
 
 `tooling okf health` is a read-only report over the existing bundle read result, validation summary, and link extraction data.
 
@@ -193,6 +193,10 @@ Process failure remains reserved for unreadable bundle paths, discovery ambiguit
 - Some signals are heuristic by design, especially citation detection and index coverage, so they must remain non-fatal and mechanically explainable.
 - Large bundles may produce long detail lists, but the lists are deterministic and belong in JSON; human output can stay compact.
 
+## Invariants
+
+Health is read-only, validation remains authoritative for conformance, ignored rule groups are explicit, and health signals never turn a readable bundle into a command execution failure.
+
 ## Alternatives Considered
 
 A single numeric health score was rejected because it would hide which OKF signals matter and create arbitrary weighting.
@@ -204,6 +208,10 @@ Embedding validation issues inside `data.validation` was rejected because the sh
 Fetching external links to verify citations was rejected because `health` must stay local, deterministic, fast, and independent of network access.
 
 Reporting only counts was rejected because deterministic detail paths are needed for actionable human output and scriptable remediation, while still keeping the contract smaller than a full lint report.
+
+## Compatibility Rules
+
+Reuse the shared resolver, read model, issue channel, semantic normalization, and JSON envelope. Add future signal groups without changing the meaning of validation or existing top-level response fields.
 
 ## Relations
 
@@ -221,3 +229,4 @@ Reporting only counts was rejected because deterministic detail paths are needed
 - [Links Command Contract](Links%20Command%20Contract.md)
 - [Test Strategy](Test%20Strategy.md)
 - [Tooling Roadmap](../Tooling%20Roadmap.md)
+- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)

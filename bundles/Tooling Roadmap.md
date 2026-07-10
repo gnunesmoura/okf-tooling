@@ -42,6 +42,27 @@ The read and analysis command surface is complete through `health`. The only
 remaining product feature is `props`, which adds the narrow frontmatter export
 surface needed before release preparation can begin.
 
+## Approved SDD Pilot
+
+**CHANGE-001 — props** was approved by the human maintainer in this request
+on 2026-07-10. Owner: Product Develop Team. The bounded outcome is a
+read-only `props` projection of the existing frontmatter fields `type`,
+`title`, `description`, and `tags`, with documented human table, JSON, and CSV
+output as applicable. The future change package must define predictable
+behavior for missing or explicitly selected unknown fields, empty bundles,
+mixed frontmatter, stable ordering, and regression tests while reusing the
+shared read model and output conventions.
+
+Non-goals are bundle mutation, a new property schema, new `props` concepts,
+and release-governance work. Confirmed context: [PRD - Python Tooling Library
+and CLI](prds/PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md), [PRD - OKF
+Module](prds/PRD%20-%20OKF%20Module.md), [Data Contracts](architecture/Data%20Contracts.md),
+[Output and Errors](architecture/Output%20and%20Errors.md), [Command Flows](architecture/Command%20Flows.md),
+[Feature - Summarized OKF Navigation](features/Feature%20-%20Summarized%20OKF%20Navigation.md),
+[Open Knowledge Format Specification](references/Open%20Knowledge%20Format%20Specification.md),
+[Tooling Roadmap](Tooling%20Roadmap.md), and [Going Open Source Roadmap](Going%20Open%20Source%20Roadmap.md).
+No change package or implementation is created by this selection.
+
 ## Product Spine
 
 The remaining OKF roadmap should stay read-only, share one bundle resolver and one read model, and keep human and JSON output stable.
@@ -101,6 +122,8 @@ The user journey should move from discovering and opening a single concept, to v
 - [Feature - OKF Backlinks](features/Feature%20-%20OKF%20Backlinks.md)
 - [Feature - OKF Show](features/Feature%20-%20OKF%20Show.md)
 - [Feature - OKF Validation](features/Feature%20-%20OKF%20Validation.md)
+- [Feature - OKF Health](features/Feature%20-%20OKF%20Health.md)
+- [PRD - OKF Health](prds/PRD%20-%20OKF%20Health.md)
 - [Discovery and Resolution](architecture/Discovery%20and%20Resolution.md)
 - [Data Contracts](architecture/Data%20Contracts.md)
 - [Command Flows](architecture/Command%20Flows.md)

@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureContract
 title: Data Contracts
 description: Defines the initial read model for bundles, concepts, directories, list windows, links, and issues.
 tags:
@@ -10,9 +10,13 @@ tags:
 
 # Data Contracts
 
+## Scope
+
 The OKF read model should be built once in the shared reader module and reused by `tree`, `list`, and later commands. Command handlers should only transform that model into their own output shape.
 
-## Bundle
+## Payload Contract
+
+### Bundle
 
 - `root_path`
 - `relative_path`
@@ -27,7 +31,7 @@ The OKF read model should be built once in the shared reader module and reused b
 - `root_index_issues`
 - `root_log_issues`
 
-## Concept
+### Concept
 
 - `concept_id`
 - `path`
@@ -54,7 +58,7 @@ Concept invariants:
 - `title` falls back to a filename-derived value when omitted;
 - reserved files are never treated as concepts.
 
-## ListResult
+### ListResult
 
 - `concepts`
 - `total`
@@ -73,7 +77,7 @@ List result invariants:
 - `truncated` is `true` when the current payload does not include every matched concept.
 - `offset` and `limit` are non-negative when present; invalid values are rejected before the result object is built.
 
-## Directory
+### Directory
 
 - `path`
 - `absolute_path`
@@ -92,7 +96,7 @@ Directory invariants:
 - `index.md` and `log.md` are reserved filenames at any depth;
 - directory counts and concept counts should be derived from the normalized inventory, not by ad hoc traversal in each command.
 
-## Link
+### Link
 
 - `source_concept_id`
 - `source_path`
@@ -105,7 +109,7 @@ Directory invariants:
 - `target_concept_id`
 - `target_path`
 
-## Issue
+### Issue
 
 - `code`
 - `message`
@@ -117,3 +121,19 @@ Directory invariants:
 - `fatal`
 
 The contracts should be stable enough for later `links`, `backlinks`, `props`, `health`, and `validate` commands without implementing those commands now.
+
+## Invariants
+
+Concept, list, and directory records obey the invariants stated in their payload sections; normalized identities and reserved-file handling are shared across all consumers of the read model.
+
+## Compatibility Rules
+
+Preserve unknown frontmatter fields in `frontmatter`, keep reserved files outside concept records, and derive normalized identities consistently so later commands can consume the same records without changing the reader contract.
+
+## Relations
+
+- [Architecture Overview](Architecture%20Overview.md)
+- [OKF Boundaries](OKF%20Boundaries.md)
+- [Discovery and Resolution](Discovery%20and%20Resolution.md)
+- [Output and Errors](Output%20and%20Errors.md)
+- [List Result Windowing](List%20Result%20Windowing.md)

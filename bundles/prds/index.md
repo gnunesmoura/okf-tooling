@@ -2,6 +2,13 @@
 
 Product requirements and product decisions for `tooling`.
 
+## SDD role
+
+PRDs are normative for product intent, scope, and requirements: read them to
+understand why a change exists and what outcome it must achieve. Phase notes
+or completed implementation requirements remain contextual history; current
+change execution state belongs in a future change package.
+
 ## Documents
 
 - [PRD - Python Tooling Library and CLI](PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md) - General requirements for the local `tooling` library and CLI.

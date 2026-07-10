@@ -1,5 +1,5 @@
 ---
-type: ArchitectureDecision
+type: ArchitectureContract
 title: List Command Contract
 description: Defines the concept-only inventory contract for `tooling okf list`.
 tags:
@@ -11,13 +11,17 @@ tags:
 
 # List Command Contract
 
+## Scope
+
+This contract defines the concept-only inventory behavior of `tooling okf list`; structural directory and reserved-file views remain outside its payload.
+
 ## Decision
 
 `tooling okf list` is the concept inventory command.
 
 It returns concept documents only. Reserved files and directories stay out of the result set because they belong to `tree` and other structural views.
 
-## Contract
+## Payload and Behavior Contract
 
 - Resolve the bundle using the shared discovery and path rules.
 - Inventory concepts from the bundle read model.
@@ -27,6 +31,10 @@ It returns concept documents only. Reserved files and directories stay out of th
 - Sort the final concept list by `concept_id` ascending.
 - Apply an optional `--offset` and `--limit` window after filtering and sorting.
 - Reject negative `--offset` and `--limit` values instead of coercing them.
+
+## Invariants
+
+The result contains only concepts, is sorted by `concept_id`, applies filters before windowing, and never silently coerces invalid window inputs.
 
 ## Output
 
@@ -48,7 +56,11 @@ It returns concept documents only. Reserved files and directories stay out of th
 - Stable ordering, filter semantics, and explicit windowing keep downstream automation predictable.
 - Human output is more useful when it identifies the concept and where to find it.
 
-## Relation
+## Compatibility Rules
+
+Keep the shared envelope, read-model concept fields, exact-match filter semantics, and window metadata compatible with [List Result Windowing](List%20Result%20Windowing.md).
+
+## Relations
 
 - [Feature - OKF Concept List](../features/Feature%20-%20OKF%20Concept%20List.md)
 - [List Result Windowing](List%20Result%20Windowing.md)

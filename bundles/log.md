@@ -1,5 +1,9 @@
 # Tooling - Log
 
+## 2026-07-10
+
+- **Decision**: Recorded human approval of [CHANGE-001 — props](Tooling%20Roadmap.md#approved-sdd-pilot) as the first SDD pilot; scope remains read-only frontmatter export and no change package is created yet.
+
 ## 2026-07-09
 
 - **Creation**: Added the [Going Open Source Roadmap](Going%20Open%20Source%20Roadmap.md) concept covering `props`, public project governance, package readiness, TestPyPI validation, first release, and post-release maintenance.
@@ -37,9 +41,9 @@
 - **Update**: Tightened the architecture bundle with explicit discovery, resolution, output, and error contracts after council review.
 - **Creation**: Added the [Architecture](architecture/) bundle to capture the initial `tooling` library and CLI decisions.
 - **Creation**: Added [Open Knowledge Format Specification](references/Open%20Knowledge%20Format%20Specification.md) as a local reference for the tooling bundle.
-- **Update**: Aligned the architecture prompt and PRDs around a Phase 1 reading MVP and kept the `tooling` knowledge bundle in English.
+- **Update**: Aligned the early architecture guidance and PRDs around a Phase 1 reading MVP and kept the `tooling` knowledge bundle in English.
 - **Update**: Translated the `tooling` knowledge bundle to English and renamed documents, folders, and internal links accordingly.
-- **Creation**: Created [Prompt - Tooling Architecture Definition](prompts/Prompt%20-%20Tooling%20Architecture%20Definition.md) to guide the initial library and CLI architecture.
+- **Historical**: Earlier prompt artifacts were removed after the change-package workflow made explicit task and agent-contract documents the operational source for implementation work.
 - **Update**: Defined deterministic failure when automatic discovery finds multiple bundles, listing reference commands for each candidate.
 - **Update**: Adjusted bundle resolution to accept relative paths, absolute paths, or automatic discovery in the current directory.
 - **Update**: Migrated the main library and CLI PRD to [PRD - Python Tooling Library and CLI](prds/PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md).

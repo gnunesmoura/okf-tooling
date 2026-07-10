@@ -127,3 +127,4 @@ Provide a read-only `validate` command that reports OKF bundle conformance issue
 - [Output and Errors](../architecture/Output%20and%20Errors.md)
 - [Test Strategy](../architecture/Test%20Strategy.md)
 - [Feature - OKF Show](Feature%20-%20OKF%20Show.md)
+- [Open Knowledge Format Specification](../references/Open%20Knowledge%20Format%20Specification.md)

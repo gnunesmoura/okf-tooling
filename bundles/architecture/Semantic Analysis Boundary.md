@@ -35,6 +35,10 @@ The OKF domain should expose one shared semantic-normalization boundary over raw
 - Raw storage, semantic analysis, and presentation remain explicitly separated.
 - No new persisted field is required; the boundary can be implemented as a shared projection over the existing read model.
 
+## Alternatives Considered
+
+Having each semantic command scan raw bodies independently was rejected because it would duplicate ignore rules and allow links, backlinks, and health to disagree.
+
 ## Relations
 
 - [Feature - OKF Show](../features/Feature%20-%20OKF%20Show.md)
