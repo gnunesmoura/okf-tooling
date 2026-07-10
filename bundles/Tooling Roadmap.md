@@ -44,8 +44,9 @@ surface needed before release preparation can begin.
 
 ## Approved SDD Pilot
 
-**CHANGE-001 — props** was approved by the human maintainer in this request
-on 2026-07-10. Owner: Product Develop Team. The bounded outcome is a
+**CHANGE-001 — props** was approved in this request on 2026-07-10. Owner:
+Product Develop Team. Reviewer/approval: human maintainer approval recorded
+on 2026-07-10. The bounded outcome is a
 read-only `props` projection of the existing frontmatter fields `type`,
 `title`, `description`, and `tags`, with documented human table, JSON, and CSV
 output as applicable. The future change package must define predictable

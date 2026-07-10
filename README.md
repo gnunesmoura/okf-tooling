@@ -169,10 +169,13 @@ the following documents are primarily for maintainers and contributors:
 - [Tooling Overview](bundles/Tooling%20Overview.md)
 - [PRD - Python Tooling Library and CLI](bundles/prds/PRD%20-%20Python%20Tooling%20Library%20and%20CLI.md)
 - [PRD - OKF Module](bundles/prds/PRD%20-%20OKF%20Module.md)
-- [Prompt - Tooling Architecture Definition](bundles/prompts/Prompt%20-%20Tooling%20Architecture%20Definition.md)
 
 The PRDs describe product intent and roadmap status; they are not a substitute
 for verifying the behavior of a particular checkout.
+
+Maintainers working on a change should use the [bundle index](bundles/) for
+authority order, conflict handling, and lifecycle evidence, and use
+[PLAN.md](PLAN.md) for the SDD adoption scope.
 
 ## Contributing and licensing
 

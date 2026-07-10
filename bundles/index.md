@@ -8,6 +8,7 @@ Knowledge bundle for the local Python library and CLI `tooling`.
 - [Features](features/) - Guides for features supported by the CLI and library.
 - [Architecture](architecture/) - Initial architecture decisions for the local `tooling` library and CLI.
 - [References](references/) - Reference specifications used by the product and OKF module.
+- [Changes](changes/) - Approved SDD change packages and their execution state.
 
 ## SDD area roles
 

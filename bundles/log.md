@@ -2,6 +2,10 @@
 
 ## 2026-07-10
 
+- **Creation**: Added reusable SDD templates under [Changes template](/changes/_template/)
+  using the artifact names and frontmatter conventions defined by `OKF-SDD.md`.
+- **Creation**: Added the reserved [Changes](changes/) area for future SDD
+  change packages; no package or placeholder concept was created.
 - **Decision**: Recorded human approval of [CHANGE-001 — props](Tooling%20Roadmap.md#approved-sdd-pilot) as the first SDD pilot; scope remains read-only frontmatter export and no change package is created yet.
 
 ## 2026-07-09
