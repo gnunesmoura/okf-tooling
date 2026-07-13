@@ -23,6 +23,7 @@ PROJECT = tomllib.loads((Path(__file__).resolve().parents[1] / "pyproject.toml")
 PROJECT_METADATA = PROJECT["project"]
 PUBLIC_DISTRIBUTION = PROJECT["tool"]["mira_okf"]["public_distribution"]
 README = (Path(__file__).resolve().parents[1] / "README.md").read_text(encoding="utf-8")
+LICENSE_TEXT = (Path(__file__).resolve().parents[1] / "LICENSE").read_text(encoding="utf-8")
 COMMANDS = {
     "tree": ["tree", "--summary"],
     "list": ["list"],
@@ -106,6 +107,10 @@ class PublicQualityGateTest(unittest.TestCase):
         )
         if malformed:
             (bundle / "index.md").write_text("index\n", encoding="utf-8")
+            (bundle / "unterminated.md").write_text(
+                "---\ntype: Note\ntitle: Incomplete\nReadable content remains available.\n",
+                encoding="utf-8",
+            )
         return bundle
 
     def invoke(self, command: str, bundle: Path) -> tuple[int, dict, str]:
@@ -135,7 +140,14 @@ class PublicQualityGateTest(unittest.TestCase):
         environment["PIP_NO_INDEX"] = "1"
         if epoch is not None:
             environment["SOURCE_DATE_EPOCH"] = epoch
-        result = subprocess.run(command, cwd=repository, env=environment, capture_output=True, text=True)
+        with tempfile.TemporaryDirectory() as source_dir:
+            source = Path(source_dir) / repository.name
+            shutil.copytree(
+                repository,
+                source,
+                ignore=shutil.ignore_patterns(".git", ".venv", "build", "dist", "*.egg-info", "__pycache__"),
+            )
+            result = subprocess.run(command, cwd=source, env=environment, capture_output=True, text=True)
         if result.returncode != 0 and "No module named build.__main__" in result.stderr:
             self.skipTest("PEP 517 prerequisite unavailable: python -m build is not installed")
         self.assertEqual(result.returncode, 0, result.stderr)
@@ -146,7 +158,12 @@ class PublicQualityGateTest(unittest.TestCase):
         self.assertEqual(metadata["Version"], PUBLIC_DISTRIBUTION["version"])
         self.assertEqual(metadata["Requires-Python"], PUBLIC_DISTRIBUTION["python"])
         self.assertEqual(metadata["Maintainer"], PUBLIC_DISTRIBUTION["maintainer"])
-        self.assertEqual(metadata["License"], PUBLIC_DISTRIBUTION["license"])
+        normalized_license = "\n".join(
+            line[8:] if line.startswith("        ") else line
+            for line in metadata["License"].splitlines()
+        ).strip()
+        self.assertEqual(normalized_license, LICENSE_TEXT.strip())
+        self.assertTrue(metadata["License"].lstrip().startswith("MIT License"))
         self.assertEqual(metadata["Description-Content-Type"], "text/markdown")
         self.assertEqual(metadata.get_payload().strip(), README.strip())
         self.assertIn("Project-URL: Repository, " + PUBLIC_DISTRIBUTION["repository_url"], metadata.as_string())
@@ -244,13 +261,35 @@ class PublicQualityGateTest(unittest.TestCase):
             second.mkdir()
             self.build_artifacts(first, epoch="1700000000")
             self.build_artifacts(second, epoch="1700000000")
-            for suffix in (".tar.gz", ".whl"):
-                left = next(first.glob(f"*{suffix}"))
-                right = next(second.glob(f"*{suffix}"))
-                self.assertEqual(left.name, right.name)
-                self.assertEqual(hashlib.sha256(left.read_bytes()).digest(), hashlib.sha256(right.read_bytes()).digest())
-            self.assertEqual(self.inspect_sdist(next(first.glob("*.tar.gz")))[0], self.inspect_sdist(next(second.glob("*.tar.gz")))[0])
-            self.assertEqual(self.inspect_wheel(next(first.glob("*.whl")))[0], self.inspect_wheel(next(second.glob("*.whl")))[0])
+
+            left_wheel = next(first.glob("*.whl"))
+            right_wheel = next(second.glob("*.whl"))
+            self.assertEqual(left_wheel.name, right_wheel.name)
+            self.assertEqual(left_wheel.read_bytes(), right_wheel.read_bytes())
+            self.assertEqual(hashlib.sha256(left_wheel.read_bytes()).digest(), hashlib.sha256(right_wheel.read_bytes()).digest())
+
+            left_sdist = next(first.glob("*.tar.gz"))
+            right_sdist = next(second.glob("*.tar.gz"))
+            self.assertEqual(left_sdist.name, right_sdist.name)
+            with tarfile.open(left_sdist) as left_archive, tarfile.open(right_sdist) as right_archive:
+                left_members = {member.name: member for member in left_archive.getmembers()}
+                right_members = {member.name: member for member in right_archive.getmembers()}
+                self.assertEqual(set(left_members), set(right_members))
+                timestamp_differences = []
+                for name in sorted(left_members):
+                    left_member = left_members[name]
+                    right_member = right_members[name]
+                    self.assertEqual(
+                        left_archive.extractfile(left_member).read() if left_member.isfile() else None,
+                        right_archive.extractfile(right_member).read() if right_member.isfile() else None,
+                        name,
+                    )
+                    for field in ("mtime", "mode", "uid", "gid", "uname", "gname"):
+                        if getattr(left_member, field) != getattr(right_member, field):
+                            timestamp_differences.append((name, field))
+                self.assertTrue(timestamp_differences)
+                self.assertTrue(all(field == "mtime" for _, field in timestamp_differences), timestamp_differences)
+                self.assertEqual(self.inspect_sdist(left_sdist)[0], self.inspect_sdist(right_sdist)[0])
 
     def test_installed_console_smoke_uses_built_wheel_outside_checkout(self) -> None:
         repository = Path(__file__).resolve().parents[1]
