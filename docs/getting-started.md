@@ -9,12 +9,21 @@ tags: [guide, installation, okf]
 
 ## Install
 
-Use Python 3.12 or newer and install a built wheel or source distribution in
-an isolated environment:
+Use Python 3.12 or newer. From a local checkout, create and activate a virtual
+environment, then install the project in editable mode:
 
 ```bash
-python3 -m venv /tmp/mira-okf-venv
-/tmp/mira-okf-venv/bin/python -m pip install /path/to/mira_okf-0.0.1a1-py3-none-any.whl
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -e .
+```
+
+Always use `python -m pip` after activating the environment so `pip` installs
+into the same Python environment that provides `mira-okf`. Confirm the command
+is available before inspecting a bundle:
+
+```bash
+mira-okf okf --help
 ```
 
 ## Inspect a bundle
