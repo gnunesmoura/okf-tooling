@@ -9,9 +9,30 @@ The supported interface is documented in [`docs/`](docs/). Start with the
 [getting started guide](docs/getting-started.md), then use the
 [command map](docs/commands/index.md) and [behavior reference](docs/behavior/index.md).
 
+## Install
+
+Python 3.12 or newer is required. To install the CLI for your user account so
+it is available in later terminals:
+
+```bash
+python3 -m pip install --user --upgrade "git+https://github.com/gnunesmoura/mira-okf.git"
+mira-okf --version
+```
+
+If you already cloned this repository, install the checkout instead:
+
+```bash
+python3 -m pip install --user --upgrade .
+mira-okf --version
+```
+
+On Windows, use `py -m pip` instead of `python3 -m pip`. If `mira-okf` is not
+found after a user install, add Python's user `Scripts` directory to `PATH`.
+
 ## Quick start
 
-Python 3.12 or newer is required. With a built wheel or source distribution:
+With a built wheel or source distribution, an isolated environment is also
+supported:
 
 ```bash
 python3 -m venv /tmp/mira-okf-venv

@@ -93,7 +93,7 @@ class HealthCommandTest(unittest.TestCase):
             self.assertEqual(data["metadata"]["fields"][0]["field"], "title")
             self.assertIn("nested/beta", data["metadata"]["fields"][1]["missing_concepts"])
             self.assertEqual(data["citations"]["external_linked_without_citations_count"], 0)
-            self.assertEqual(data["connectivity"]["orphan_concepts"], ["nested/gamma"])
+            self.assertEqual(data["connectivity"]["unreachable_concepts"], ["nested/gamma"])
 
     def test_health_status_ok_and_attention(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -216,6 +216,109 @@ class HealthCommandTest(unittest.TestCase):
             lines = stdout.strip().splitlines()
             self.assertEqual(lines[0], f"{root}  profile: quick  health: attention")
             self.assertEqual([line.split(":", 1)[0] for line in lines[1:]], ["inventory", "reserved files", "links", "connectivity"])
+
+    def test_health_classifies_semantic_navigation_only_and_unreachable(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(
+                root,
+                {
+                    "index.md": "- [Nested](/nested/index.md)\n",
+                    "alpha.md": "---\ntype: Note\n---\n[Beta](beta.md)\n",
+                    "beta.md": "---\ntype: Note\n---\n",
+                    "nested/index.md": "- [Root](/index.md)\n- [Gamma](gamma.md)\n- [Again](gamma.md)\n",
+                    "nested/gamma.md": "---\ntype: Note\n---\n",
+                    "delta.md": "---\ntype: Note\n---\n",
+                },
+            )
+
+            exit_code, stdout, _ = run_main(["health", str(root), "--json"])
+            self.assertEqual(exit_code, 0)
+            connectivity = json.loads(stdout)["data"]["connectivity"]
+            self.assertEqual(connectivity["semantic_concept_count"], 2)
+            self.assertEqual(connectivity["navigation_only_concept_count"], 1)
+            self.assertEqual(connectivity["navigation_only_concepts"], ["nested/gamma"])
+            self.assertEqual(connectivity["unreachable_concept_count"], 1)
+            self.assertEqual(connectivity["unreachable_concepts"], ["delta"])
+
+    def test_health_navigation_only_does_not_affect_unreachable_signals(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(
+                root,
+                {
+                    "index.md": "- [Listed](listed.md)\n",
+                    "listed.md": "---\ntype: Note\n---\n",
+                    "lost.md": "---\ntype: Note\n---\n",
+                },
+            )
+
+            exit_code, stdout, _ = run_main(["health", str(root), "--json"])
+            self.assertEqual(exit_code, 0)
+            data = json.loads(stdout)["data"]
+            connectivity = data["connectivity"]
+            self.assertEqual(
+                set(connectivity),
+                {
+                    "concepts_with_internal_links_count", "concepts_without_inbound_count",
+                    "concepts_without_outbound_count", "semantic_concept_count",
+                    "navigation_only_concept_count", "navigation_only_concepts",
+                    "unreachable_concept_count", "unreachable_concepts",
+                },
+            )
+            self.assertEqual(connectivity["unreachable_concepts"], ["lost"])
+            self.assertEqual(data["summary"]["warning_signal_count"], 1)
+            self.assertEqual(data["summary"]["error_signal_count"], 0)
+
+    def test_health_human_connectivity_distinguishes_states(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(
+                root,
+                {
+                    "index.md": "- [Listed](listed.md)\n",
+                    "listed.md": "---\ntype: Note\n---\n",
+                    "linked.md": "---\ntype: Note\n---\n[Semantic](semantic.md)\n",
+                    "semantic.md": "---\ntype: Note\n---\n[Linked](linked.md)\n",
+                    "lost.md": "---\ntype: Note\n---\n",
+                },
+            )
+
+            exit_code, stdout, stderr = run_main(["health", str(root)])
+            self.assertEqual(exit_code, 0)
+            self.assertEqual(stderr, "")
+            lines = stdout.strip().splitlines()
+            self.assertEqual(lines[0], f"{root}  profile: quick  health: attention")
+            self.assertIn("connectivity: semantic 2  navigation-only 1  unreachable 1", lines[-1])
+            self.assertNotIn("orphans", lines[-1])
+
+    def test_health_ignores_non_connective_links_and_orders_output_deterministically(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(
+                root,
+                {
+                    "index.md": "index\n",
+                    "zeta.md": (
+                        "---\ntype: Note\n---\n"
+                        "[Self](zeta.md) [Duplicate](zeta.md) [Reserved](index.md) "
+                        "[Log](log.md) [External](https://example.com) [Broken](missing.md) "
+                        "[Hidden](.hidden.md)\n"
+                    ),
+                    "alpha.md": "---\ntype: Note\n---\n",
+                    "log.md": "# Log\n",
+                    ".hidden.md": "---\ntype: Note\n---\n",
+                },
+            )
+
+            reports = []
+            for _ in range(2):
+                exit_code, stdout, _ = run_main(["health", str(root), "--json"])
+                self.assertEqual(exit_code, 0)
+                reports.append(json.loads(stdout)["data"]["connectivity"])
+            self.assertEqual(reports[0], reports[1])
+            self.assertEqual(reports[0]["semantic_concept_count"], 0)
+            self.assertEqual(reports[0]["unreachable_concepts"], ["alpha", "zeta"])
 
 
 if __name__ == "__main__":

@@ -272,16 +272,63 @@ def _has_citations(body: str) -> bool:
 
 
 def _connectivity(bundle: Bundle, links: list[dict[str, Any]]) -> dict[str, Any]:
-    concepts = {concept.concept_id for concept in bundle.concepts}
-    outbound = {link["source_concept_id"] for link in links if link["resolved"] and link["target_concept_id"] in concepts}
-    inbound = {link["target_concept_id"] for link in links if link["resolved"] and link["target_concept_id"] in concepts}
-    orphans = sorted(concepts - inbound - outbound, key=str.casefold)
+    concepts_by_id = {concept.concept_id: concept for concept in bundle.concepts}
+    concepts_by_relative = {concept.relative_path: concept for concept in bundle.concepts}
+    semantic = {
+        concept_id
+        for link in links
+        if link["resolved"]
+        and link["target_concept_id"] in concepts_by_id
+        and link["source_concept_id"] != link["target_concept_id"]
+        for concept_id in (link["source_concept_id"], link["target_concept_id"])
+    }
+    navigable: set[str] = set()
+    indexes = {
+        (directory.absolute_path.relative_to(bundle.root_path).as_posix() + "/" if directory.absolute_path != bundle.root_path else "") + "index.md"
+        for directory in bundle.directories
+        if directory.has_index
+    }
+    index_directories = {
+        index.removesuffix("/index.md").removesuffix("index.md"): index
+        for index in indexes
+    }
+    pending = sorted(indexes, key=_path_key)
+    visited: set[str] = set()
+    while pending:
+        source = pending.pop(0)
+        if source in visited:
+            continue
+        visited.add(source)
+        text, _ = _read_markdown_text(bundle.root_path / source, source)
+        for _, raw_target in _extract_links(semantic_text(text or "")):
+            target = _normalize_target(raw_target)
+            if not target or _is_external_target(target):
+                continue
+            for candidate in _link_candidates(source, target):
+                concept = concepts_by_id.get(candidate) or concepts_by_relative.get(candidate)
+                if concept is not None:
+                    navigable.add(concept.concept_id)
+                    break
+                index = index_directories.get(candidate)
+                index = index or (candidate if candidate in indexes else None)
+                if index is None and candidate.endswith(".md"):
+                    index = candidate.removesuffix(".md") + "/index.md"
+                if index in indexes and index not in visited:
+                    pending.append(index)
+                    break
+    semantic_only = semantic & set(concepts_by_id)
+    navigation_only = navigable - semantic_only
+    unreachable = set(concepts_by_id) - semantic_only - navigation_only
+    unreachable_concepts = sorted(unreachable, key=str.casefold)
     return {
-        "concepts_with_internal_links_count": len(outbound),
-        "concepts_without_inbound_count": len(concepts - inbound),
-        "concepts_without_outbound_count": len(concepts - outbound),
-        "orphan_concept_count": len(orphans),
-        "orphan_concepts": orphans,
+        "concepts_with_internal_links_count": len({link["source_concept_id"] for link in links if link["resolved"] and link["target_concept_id"] in concepts_by_id and link["source_concept_id"] != link["target_concept_id"]}),
+        "concepts_without_inbound_count": len(set(concepts_by_id) - {link["target_concept_id"] for link in links if link["resolved"] and link["target_concept_id"] in concepts_by_id and link["source_concept_id"] != link["target_concept_id"]}),
+        "concepts_without_outbound_count": len(set(concepts_by_id) - {link["source_concept_id"] for link in links if link["resolved"] and link["target_concept_id"] in concepts_by_id and link["source_concept_id"] != link["target_concept_id"]}),
+        "semantic_concept_count": len(semantic_only),
+        "navigation_only_concept_count": len(navigation_only),
+        "navigation_only_concepts": sorted(navigation_only, key=str.casefold),
+        "unreachable_concept_count": len(unreachable),
+        "unreachable_concepts": unreachable_concepts,
     }
 
 
@@ -385,7 +432,11 @@ def _render_group(group: str, data: dict[str, Any], summary: dict[str, Any]) -> 
         return f"{GROUP_LABELS[group]}: external without citations {citations['external_linked_without_citations_count']}"
     if group == "connectivity":
         connectivity = data[group]
-        return f"{GROUP_LABELS[group]}: orphans {connectivity['orphan_concept_count']}"
+        return (
+            f"{GROUP_LABELS[group]}: semantic {connectivity['semantic_concept_count']}  "
+            f"navigation-only {connectivity['navigation_only_concept_count']}  "
+            f"unreachable {connectivity['unreachable_concept_count']}"
+        )
     return group
 
 
@@ -403,7 +454,7 @@ def _warning_signal_count(group: str, data: dict[str, Any]) -> int:
     if group == "citations":
         return data["external_linked_without_citations_count"]
     if group == "connectivity":
-        return data["orphan_concept_count"]
+        return data["unreachable_concept_count"]
     return 0
 
 
