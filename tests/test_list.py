@@ -133,6 +133,37 @@ class ListCommandTest(unittest.TestCase):
             self.assertEqual(lines[1], "alpha.md  [Note]  Alpha")
             self.assertEqual(lines[2], "nested/beta.md  [Task]  Beta")
 
+    def test_list_profiles_filter_json_fields_and_exclude_body(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(root, {"index.md": "index\n", "alpha.md": "---\ntype: Note\ntitle: Alpha\ndescription: Desc\nstatus: active\n---\nsecret body\n"})
+            for profile, fields in {
+                "brief": {"concept_id", "title"},
+                "normal": {"concept_id", "title", "type", "description", "relative_path"},
+                "full": {"concept_id", "path", "relative_path", "directory", "filename", "type", "title", "description", "resource", "tags", "timestamp", "frontmatter", "issues"},
+            }.items():
+                exit_code, stdout, stderr = run_main(["list", str(root), "--profile", profile, "--json"])
+                self.assertEqual((exit_code, stderr), (0, ""))
+                payload = json.loads(stdout)
+                self.assertEqual(payload["data"]["profile"], profile)
+                concept = payload["data"]["concepts"][0]
+                self.assertEqual(set(concept), fields)
+                self.assertNotIn("body", concept)
+
+    def test_list_profiles_human_output_is_deterministic(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(root, {"index.md": "index\n", "alpha.md": "---\ntype: Note\ntitle: Alpha\nstatus: active\n---\nbody\n"})
+            exit_code, brief, stderr = run_main(["list", str(root), "--profile", "brief"])
+            self.assertEqual((exit_code, stderr), (0, ""))
+            self.assertEqual(brief.splitlines()[1], "alpha  Alpha")
+            first = run_main(["list", str(root), "--profile", "full"])[1]
+            second = run_main(["list", str(root), "--profile", "full"])[1]
+            self.assertEqual(first, second)
+            self.assertIn("  frontmatter:", first)
+            self.assertIn("  status: active", first)
+            self.assertNotIn("body", first)
+
     def test_list_rejects_negative_window_values(self) -> None:
         parser = build_parser()
         stderr = io.StringIO()

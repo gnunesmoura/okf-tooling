@@ -9,7 +9,45 @@ from tests.support import run_main
 
 
 class TreeCommandTest(unittest.TestCase):
-    def test_tree_summary_controls_human_detail(self) -> None:
+    def test_tree_json_normalizes_root_and_nested_index_titles(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            (root / "nested").mkdir(parents=True)
+            (root / "index.md").write_text("paragraph\n#  Root Title  #\n# later\n", encoding="utf-8")
+            (root / "nested" / "index.md").write_text("## not h1\n   # Nested Title\n", encoding="utf-8")
+
+            payload = json.loads(run_main(["tree", str(root), "--depth", "1", "--json"])[1])
+            directory = payload["data"]
+            self.assertEqual(directory["index_title"], "Root Title")
+            self.assertEqual(directory["children"][0]["index_title"], "Nested Title")
+
+    def test_tree_json_uses_null_for_missing_or_titleless_indexes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            (root / "no-index").mkdir(parents=True)
+            (root / "titleless").mkdir(parents=True)
+            (root / "index.md").write_text("no heading\n", encoding="utf-8")
+            (root / "titleless" / "index.md").write_text("## Only H2\n", encoding="utf-8")
+
+            for profile in ("brief", "normal", "full"):
+                payload = json.loads(run_main(["tree", str(root), "--depth", "1", "--profile", profile, "--json"])[1])
+                titles = {child["path"]: child["index_title"] for child in payload["data"]["children"]}
+                self.assertIsNone(payload["data"]["index_title"])
+                self.assertIsNone(titles["no-index"])
+                self.assertIsNone(titles["titleless"])
+
+    def test_tree_json_index_title_is_present_and_deterministic_for_each_profile(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            root.mkdir()
+            (root / "index.md").write_text("# Stable\n", encoding="utf-8")
+            for profile in ("brief", "normal", "full"):
+                first = run_main(["tree", str(root), "--profile", profile, "--json"])[1]
+                second = run_main(["tree", str(root), "--profile", profile, "--json"])[1]
+                self.assertEqual(first, second)
+                self.assertEqual(json.loads(first)["data"]["index_title"], "Stable")
+
+    def test_tree_profiles_control_human_detail(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir) / "bundle"
             (root / "index.md").parent.mkdir(parents=True)
@@ -21,14 +59,51 @@ class TreeCommandTest(unittest.TestCase):
 
             self.assertEqual((plain_exit, plain_stderr), (0, ""))
             self.assertEqual((summary_exit, summary_stderr), (0, ""))
-            self.assertTrue(plain_stdout.strip().endswith("/bundle/"))
+            self.assertEqual(plain_stdout.splitlines()[0], f"{root}/")
             self.assertNotIn("concepts:", plain_stdout)
             self.assertNotIn("reserved:", plain_stdout)
-            self.assertIn("index.md", summary_stdout)
-            self.assertIn("concepts: 1", summary_stdout)
-            self.assertIn("reserved: 1", summary_stdout)
+            self.assertEqual(summary_stdout, run_main(["tree", str(root), "--depth", "0", "--profile", "brief"])[1])
+            self.assertIn("Alpha", summary_stdout)
+            self.assertNotIn("concepts:", summary_stdout)
 
-    def test_tree_summary_metadata_uses_directory_payload_and_json_is_unchanged(self) -> None:
+    def test_tree_human_profiles_render_index_and_concepts_separately(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            (root / "products").mkdir(parents=True)
+            (root / "index.md").write_text("# OKF Tooling Knowledge Base\n", encoding="utf-8")
+            (root / "products" / "index.md").write_text("# Products\n", encoding="utf-8")
+            (root / "alpha.md").write_text(
+                "---\ntype: Note\ntitle: Alpha\ndescription: First note\ntags: [one, two]\n---\nbody\n",
+                encoding="utf-8",
+            )
+            (root / "products" / "beta.md").write_text("---\ntype: Guide\ntitle: Beta\n---\n", encoding="utf-8")
+
+            brief = run_main(["tree", str(root), "--depth", "1", "--profile", "brief"])[1]
+            normal = run_main(["tree", str(root), "--depth", "1", "--profile", "normal"])[1]
+            full = run_main(["tree", str(root), "--depth", "1", "--profile", "full"])[1]
+
+            self.assertIn(f"{root}/index  OKF Tooling Knowledge Base", brief)
+            self.assertIn("  Alpha\n", brief)
+            self.assertIn("  products/index  Products", brief)
+            self.assertNotIn("Alpha  ", brief)
+            self.assertIn("  alpha  Note  Alpha  First note", normal)
+            self.assertIn("    products/beta  Guide  Beta", normal)
+            self.assertIn("  alpha  Note  Alpha  First note\n    description: First note", full)
+            self.assertIn("    tags: ['one', 'two']", full)
+            self.assertEqual(full, run_main(["tree", str(root), "--depth", "1", "--profile", "full"])[1])
+
+    def test_tree_human_index_without_title_keeps_path_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            (root / "empty").mkdir(parents=True)
+            (root / "index.md").write_text("no heading\n", encoding="utf-8")
+            (root / "empty" / "index.md").write_text("## Not H1\n", encoding="utf-8")
+            output = run_main(["tree", str(root), "--depth", "1", "--profile", "brief"])[1]
+            self.assertIn(f"{root}/\n", output)
+            self.assertIn("  empty/\n", output)
+            self.assertNotIn("index  ", output)
+
+    def test_tree_profiles_filter_json_concepts_without_body(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir) / "bundle"
             (root / "area").mkdir(parents=True)
@@ -50,27 +125,36 @@ class TreeCommandTest(unittest.TestCase):
             exit_code, summary_stdout, summary_stderr = run_main([*arguments, "--summary"])
             self.assertEqual((exit_code, summary_stderr), (0, ""))
             self.assertEqual(summary_stdout, run_main([*arguments, "--summary"])[1])
-            self.assertIn("bundle/  index.md  log.md  concepts: 1  reserved: 2", summary_stdout)
-            self.assertIn("  area/  index.md  concepts: 1  reserved: 1", summary_stdout)
+            self.assertIn("Concept", summary_stdout)
             self.assertNotIn("area/concept.md", plain_stdout)
 
             exit_code, plain_json, plain_stderr = run_main([*arguments, "--json"])
             self.assertEqual((exit_code, plain_stderr), (0, ""))
             exit_code, summary_json, summary_stderr = run_main([*arguments, "--summary", "--json"])
             self.assertEqual((exit_code, summary_stderr), (0, ""))
-            self.assertEqual(json.loads(plain_json), json.loads(summary_json))
+            self.assertEqual(json.loads(summary_json)["data"]["profile"], "brief")
+            self.assertEqual(json.loads(plain_json)["data"]["profile"], "normal")
+            for profile, expected in (("brief", {"concept_id", "title"}), ("normal", {"concept_id", "title", "type", "description"})):
+                payload = json.loads(run_main([*arguments, "--profile", profile, "--json"])[1])
+                concept = payload["data"]["concepts"][0]
+                self.assertEqual(set(concept), expected)
+                self.assertNotIn("body", concept)
+
+            full = json.loads(run_main([*arguments, "--profile", "full", "--json"])[1])
+            self.assertEqual(full["data"]["profile"], "full")
+            self.assertNotIn("body", full["data"]["concepts"][0])
 
     def test_tree_discovers_bundle_from_current_directory(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)
             (root / "index.md").write_text("index\n", encoding="utf-8")
             (root / "alpha.md").write_text("---\ntype: Note\ntitle: Alpha\n---\nbody\n", encoding="utf-8")
-            exit_code, stdout, stderr = run_main(["tree", "--summary"], cwd=root)
+            exit_code, stdout, stderr = run_main(["tree", "--profile", "brief"], cwd=root)
             self.assertEqual(exit_code, 0)
             self.assertEqual(stderr, "")
             output = stdout.strip().splitlines()
-            self.assertIn("index.md", output[0])
-            self.assertIn("concepts: 1", output[0])
+            self.assertIn("./", output[0])
+            self.assertIn("Alpha", output[1])
 
     def test_tree_discovers_nested_bundle_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -127,15 +211,17 @@ class TreeCommandTest(unittest.TestCase):
             root.mkdir()
             (root / "index.md").write_text("index\n", encoding="utf-8")
             (root / "broken.md").write_text("---\ntitle: Broken\n---\n", encoding="utf-8")
-            exit_code, stdout, stderr = run_main(["tree", str(root), "--depth", "2", "--summary", "--json"])
+            exit_code, stdout, stderr = run_main(["tree", str(root), "--depth", "2", "--profile", "normal", "--json"])
             self.assertEqual(exit_code, 0)
             self.assertEqual(stderr, "")
             payload = json.loads(stdout)
             self.assertTrue(payload["ok"])
             self.assertEqual(payload["command"], "okf.tree")
             self.assertEqual(payload["bundle"]["source_kind"], "explicit")
+            self.assertEqual(payload["data"]["profile"], "normal")
             self.assertEqual(payload["data"]["concept_count"], 1)
-            self.assertEqual(payload["data"]["concepts"][0]["issues"][0]["code"], "OKF_CONCEPT_MISSING_TYPE")
+            self.assertNotIn("body", payload["data"]["concepts"][0])
+            self.assertEqual(payload["issues"][0]["code"], "OKF_CONCEPT_MISSING_TYPE")
 
 
 if __name__ == "__main__":

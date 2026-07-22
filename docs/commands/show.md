@@ -8,14 +8,20 @@ tags: [command, show]
 # `show`
 
 ```text
-mira-okf show docs <concept-id-or-path> [--summary] [--json]
+mira-okf show docs <concept-id-or-path>
+  [--profile {brief,normal,full}] [--summary] [--json]
 ```
 
-Resolve a concept by id or bundle-relative Markdown path. In human-readable
-output, `--summary` presents the same resolved concept compactly: it retains
-the path-first identity and available metadata, including description and
-tags, while omitting the body. Without it, the concept content is shown. Any
-tolerated issues remain visible in the existing `Issues` section at the end.
-JSON output always includes the complete concept payload, regardless of
-`--summary`; the flag does not reduce or reshape the JSON payload. Bundle
-discovery, target resolution, and the command's read-only scope are unchanged.
+Resolve a concept by id or bundle-relative Markdown path. `--profile` defaults
+to `normal`. `--summary` is an alias for `--profile brief`; if both are
+supplied, `--summary` wins and the active profile is `brief`.
+
+| Profile | Human output | JSON concept fields |
+| --- | --- | --- |
+| `brief` | Path, type, title, description, and tags; no body | `concept_id`, `title`, `description`, `type`, `tags`, `relative_path` |
+| `normal` | Existing output, including body and the `Issues` section | Current fields, including body and frontmatter |
+| `full` | Existing output, including body and issues, plus a sorted `Frontmatter` `key: value` section | Current fields, including body and frontmatter |
+
+Show JSON includes `data.profile` with the active profile. Tolerated issues
+remain visible in the existing `Issues` section where applicable. The deferred
+`raw_frontmatter` field is not part of this contract.

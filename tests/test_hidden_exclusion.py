@@ -124,8 +124,7 @@ class TreeHiddenExclusionTest(unittest.TestCase):
             )
             self.assertEqual(exit_code, 0)
             self.assertNotIn(".hidden", stdout)
-            self.assertIn("concepts: 1", stdout)
-            self.assertIn("index.md", stdout)
+            self.assertIn("Visible", stdout)
 
     def test_tree_hidden_file_not_shown(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

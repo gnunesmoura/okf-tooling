@@ -136,7 +136,7 @@ class ShowCommandTest(unittest.TestCase):
             self.assertEqual(payload["data"]["issues"][0]["code"], "OKF_CONCEPT_MISSING_TYPE")
             self.assertEqual(payload["issues"][0]["code"], "OKF_CONCEPT_MISSING_TYPE")
 
-    def test_show_summary_preserves_complete_json_payload(self) -> None:
+    def test_show_summary_is_brief_json_alias(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir) / "bundle"
             write_files(
@@ -146,12 +146,55 @@ class ShowCommandTest(unittest.TestCase):
                     "alpha.md": "---\ntype: Note\ntitle: Alpha\ndescription: A description\ntags:\n  - shared\n---\nAlpha body\n",
                 },
             )
-            arguments = ["show", str(root), "alpha"]
-            exit_code, plain_json, plain_stderr = run_main([*arguments, "--json"])
-            self.assertEqual((exit_code, plain_stderr), (0, ""))
-            exit_code, summary_json, summary_stderr = run_main([*arguments, "--summary", "--json"])
+            arguments = ["show", str(root), "alpha", "--json"]
+            exit_code, brief_json, brief_stderr = run_main([*arguments, "--profile", "brief"])
+            self.assertEqual((exit_code, brief_stderr), (0, ""))
+            exit_code, summary_json, summary_stderr = run_main([*arguments, "--summary"])
             self.assertEqual((exit_code, summary_stderr), (0, ""))
-            self.assertEqual(json.loads(plain_json), json.loads(summary_json))
+            self.assertEqual(json.loads(brief_json), json.loads(summary_json))
+            self.assertNotIn("body", json.loads(summary_json)["data"])
+
+    def test_show_profiles_filter_json_and_render_human(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir) / "bundle"
+            write_files(root, {
+                "index.md": "index\n",
+                "alpha.md": "---\ntype: Note\ntitle: Alpha\ndescription: A description\ntags:\n  - shared\nstatus: draft\n---\nAlpha body\n",
+                "broken.md": "---\ntitle: Broken\n---\nBroken body\n",
+            })
+
+            for profile in ("brief", "normal", "full"):
+                exit_code, stdout, stderr = run_main(["show", str(root), "alpha", "--profile", profile, "--json"])
+                self.assertEqual((exit_code, stderr), (0, ""))
+                data = json.loads(stdout)["data"]
+                self.assertEqual(data["profile"], profile)
+                if profile == "brief":
+                    self.assertEqual(set(data) - {"profile"}, {"concept_id", "title", "description", "type", "tags", "relative_path"})
+                    self.assertNotIn("body", data)
+                elif profile == "normal":
+                    self.assertIn("body", data)
+                    self.assertEqual(data["frontmatter"]["status"], "draft")
+                else:
+                    self.assertIn("body", data)
+                    self.assertEqual(data["frontmatter"]["status"], "draft")
+
+                exit_code, human, stderr = run_main(["show", str(root), "alpha", "--profile", profile])
+                self.assertEqual((exit_code, stderr), (0, ""))
+                self.assertIn("alpha.md  [Note]  Alpha", human)
+                self.assertIn("description: A description", human)
+                self.assertIn("tags: shared", human)
+                if profile == "brief":
+                    self.assertNotIn("Alpha body", human)
+                else:
+                    self.assertIn("Alpha body", human)
+                if profile == "full":
+                    self.assertIn("Frontmatter", human)
+                    self.assertLess(human.index("status: draft"), human.index("Alpha body"))
+
+            exit_code, stdout, stderr = run_main(["show", str(root), "broken", "--profile", "brief"])
+            self.assertEqual((exit_code, stderr), (0, ""))
+            self.assertIn("Issues", stdout)
+            self.assertNotIn("Broken body", stdout)
 
     def test_show_reports_not_found_and_ambiguous_discovery(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -46,13 +46,18 @@ class RegressionVisibleBundleTest(unittest.TestCase):
             self.assertIn("data", payload)
             self.assertIn("issues", payload)
             data = payload["data"]
-            self.assertEqual(sorted(data), ["concepts", "limit", "offset", "returned", "total", "truncated"])
+            self.assertEqual(
+                sorted(data),
+                ["concepts", "limit", "offset", "profile", "returned", "total", "truncated"],
+            )
+            self.assertEqual(data["profile"], "normal")
             self.assertFalse(data["truncated"])
             self.assertIsInstance(data["concepts"], list)
             self.assertGreater(len(data["concepts"]), 0)
             for c in data["concepts"]:
                 self.assertIn("concept_id", c)
-                self.assertIn("path", c)
+                self.assertIn("relative_path", c)
+                self.assertNotIn("path", c)
                 self.assertIn("type", c)
                 self.assertIn("title", c)
 
@@ -116,13 +121,17 @@ class RegressionVisibleBundleTest(unittest.TestCase):
             self.assertGreater(nested["concept_count"], 0)
             self.assertTrue(nested["has_index"])
 
-    def test_tree_reserved_file_count_in_summary(self) -> None:
+    def test_tree_summary_shows_visible_titles_only(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir) / "bundle"
             write_files(root, self.BUNDLE_FILES)
             exit_code, stdout, stderr = run_main(["tree", str(root), "--depth", "2", "--summary"])
             self.assertEqual(exit_code, 0)
-            self.assertIn("reserved:", stdout)
+            self.assertIn("Alpha", stdout)
+            self.assertIn("Beta", stdout)
+            self.assertIn("Nested Concept", stdout)
+            self.assertNotIn(".hidden", stdout)
+            self.assertNotIn("reserved:", stdout)
 
     # ------------------------------------------------------------------
     # validate

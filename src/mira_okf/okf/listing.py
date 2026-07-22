@@ -20,17 +20,19 @@ def run_list(args: Namespace) -> int:
     offset = max(0, getattr(args, "offset", 0))
     limit = getattr(args, "limit", None)
     window = concepts[offset:] if limit is None else concepts[offset : offset + max(0, limit)]
+    profile = getattr(args, "profile", "normal")
     payload = {
         "ok": True,
         "command": "okf.list",
         "bundle": bundle_payload(bundle),
         "data": {
-            "concepts": [concept_payload(concept) for concept in window],
+            "concepts": [_filter_list_concept(concept_payload(concept), profile) for concept in window],
             "total": len(concepts),
             "returned": len(window),
             "offset": offset,
             "limit": limit,
             "truncated": len(window) < len(concepts),
+            "profile": profile,
         },
         "issues": [issue_payload(issue) for issue in bundle.issues],
     }
@@ -46,6 +48,14 @@ def _filtered_concepts(concepts, concept_type, tag):
     ]
 
 
+def _filter_list_concept(c: dict, profile: str) -> dict:
+    if profile == "brief":
+        return {key: c[key] for key in ("concept_id", "title")}
+    if profile == "normal":
+        return {key: c[key] for key in ("concept_id", "title", "type", "description", "relative_path")}
+    return {key: value for key, value in c.items() if key != "body"}
+
+
 def _render_list_summary(data: dict[str, Any]) -> str:
     summary = f"concepts: {data['returned']} of {data['total']}"
     if data["offset"] or data["limit"] is not None:
@@ -57,12 +67,18 @@ def _render_list_summary(data: dict[str, Any]) -> str:
         summary += " [truncated]"
     lines = [summary]
     for concept in data["concepts"]:
-        line = concept["relative_path"]
-        if concept["type"]:
-            line += f"  [{concept['type']}]"
-        if concept["title"]:
-            line += f"  {concept['title']}"
-        lines.append(line)
+        if data.get("profile") == "brief":
+            lines.append(f"{concept['concept_id']}  {concept['title']}".rstrip())
+        elif data.get("profile") == "full":
+            lines.extend(f"  {key}: {concept[key]}" for key in sorted(concept))
+            lines.extend(f"  {key}: {concept['frontmatter'][key]}" for key in sorted(concept["frontmatter"]))
+        else:
+            line = concept["relative_path"]
+            if concept["type"]:
+                line += f"  [{concept['type']}]"
+            if concept["title"]:
+                line += f"  {concept['title']}"
+            lines.append(line)
     return "\n".join(lines)
 
 

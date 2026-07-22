@@ -10,6 +10,7 @@ from .resolution import BundleResolutionError, resolve_bundle
 
 
 def run_tree(args: Namespace) -> int:
+    profile = getattr(args, "profile", "normal")
     try:
         reference_suffix = f"--depth {getattr(args, 'depth', 2)} --summary"
         bundle = resolve_bundle(args.bundle, "tree", reference_suffix)
@@ -24,6 +25,8 @@ def run_tree(args: Namespace) -> int:
         "data": directory_payload(root_directory),
         "issues": [issue_payload(issue) for issue in bundle.issues],
     }
+    payload["data"]["profile"] = profile
+    _filter_tree_directory(payload["data"], profile)
     _emit_payload(args, payload)
     return 0
 
@@ -54,24 +57,52 @@ def _emit_payload(args: Namespace, payload: dict[str, Any]) -> None:
     if getattr(args, "json", False):
         print(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
         return
-    print(_render_directory_summary(payload["data"], getattr(args, "summary", False)))
+    print(_render_directory_summary(payload["data"], getattr(args, "profile", "normal")))
 
 
-def _render_directory_summary(directory: dict[str, Any], summary: bool) -> str:
-    return _render_directory(directory, 0, summary)
+def _render_directory_summary(directory: dict[str, Any], profile: str) -> str:
+    return _render_directory(directory, 0, profile)
 
 
-def _render_directory(directory: dict[str, Any], indent: int, summary: bool) -> str:
+def _render_directory(directory: dict[str, Any], indent: int, profile: str) -> str:
     label = directory["path"] if indent == 0 else directory["name"]
-    line = f"{'  ' * indent}{label or directory['name']}/"
-    if summary:
-        if directory["has_index"]:
-            line += "  index.md"
-        if directory["has_log"]:
-            line += "  log.md"
-        reserved_count = int(directory["has_index"]) + int(directory["has_log"])
-        line += f"  concepts: {directory['concept_count']}  reserved: {reserved_count}"
-    lines = [line]
+    path = f"{label or directory['name']}/"
+    if directory.get("index_title"):
+        path += f"index  {directory['index_title']}"
+    lines = [f"{'  ' * indent}{path}"]
+    for concept in directory["concepts"]:
+        concept_line = f"{'  ' * (indent + 1)}{_render_concept(concept, profile)}"
+        lines.append(concept_line)
+        if profile == "full":
+            lines.extend(
+                f"{'  ' * (indent + 2)}{key}: {concept['frontmatter'][key]}"
+                for key in sorted(concept.get("frontmatter", {}))
+            )
     for child in directory["children"]:
-        lines.append(_render_directory(child, indent + 1, summary))
+        lines.append(_render_directory(child, indent + 1, profile))
     return "\n".join(lines)
+
+
+def _render_concept(concept: dict[str, Any], profile: str) -> str:
+    if profile == "brief":
+        return concept["title"]
+    fields = [concept["concept_id"], concept.get("type") or "", concept["title"]]
+    if concept.get("description"):
+        fields.append(concept["description"])
+    return "  ".join(fields)
+
+
+def _filter_tree_concept(c: dict, profile: str) -> dict:
+    if profile == "brief":
+        fields = ("concept_id", "title")
+    elif profile == "normal":
+        fields = ("concept_id", "title", "type", "description")
+    else:
+        fields = tuple(key for key in c if key != "body")
+    return {key: c[key] for key in fields if key in c}
+
+
+def _filter_tree_directory(directory: dict[str, Any], profile: str) -> None:
+    directory["concepts"] = [_filter_tree_concept(concept, profile) for concept in directory["concepts"]]
+    for child in directory["children"]:
+        _filter_tree_directory(child, profile)

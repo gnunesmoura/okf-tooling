@@ -73,6 +73,7 @@ def directory_payload(directory: Directory) -> dict[str, Any]:
         "name": directory.name,
         "depth": directory.depth,
         "has_index": directory.has_index,
+        "index_title": directory.index_title,
         "has_log": directory.has_log,
         "concept_count": directory.concept_count,
         "directory_count": directory.directory_count,
@@ -110,6 +111,7 @@ def _scan_directory(path: Path, display_path: str, depth: int, max_depth: int | 
 
     has_index = (path / "index.md").is_file()
     has_log = (path / "log.md").is_file()
+    index_title = _read_index_title(path / "index.md") if has_index else None
 
     if max_depth is None or depth < max_depth:
         for child_path in sorted((candidate for candidate in path.iterdir() if candidate.is_dir()), key=lambda candidate: candidate.name):
@@ -147,6 +149,7 @@ def _scan_directory(path: Path, display_path: str, depth: int, max_depth: int | 
         name=path.name or path.resolve().name,
         depth=depth,
         has_index=has_index,
+        index_title=index_title,
         has_log=has_log,
         concept_count=len(directory_concepts),
         directory_count=len(children) if max_depth is None or depth < max_depth else 0,
@@ -166,6 +169,19 @@ def _is_hidden(relative_path: str) -> bool:
 
 def _is_concept_file(path: Path) -> bool:
     return path.is_file() and path.suffix == ".md" and path.name not in RESERVED_FILENAMES
+
+
+def _read_index_title(path: Path) -> str | None:
+    try:
+        lines = path.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return None
+    for line in lines:
+        match = re.match(r"^ {0,3}#\s+(.+?)\s*$", line)
+        if match:
+            title = re.sub(r"\s+#+\s*$", "", match.group(1)).strip()
+            return title or None
+    return None
 
 
 def _read_concept(path: Path, root_path: Path, directory_label: str) -> Concept:

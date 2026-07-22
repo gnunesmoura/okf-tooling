@@ -42,6 +42,7 @@ class Directory:
     name: str
     depth: int
     has_index: bool = False
+    index_title: str | None = None
     has_log: bool = False
     concept_count: int = 0
     directory_count: int = 0
@@ -78,4 +79,3 @@ class Bundle:
     has_root_log: bool = False
     root_index_issues: list[Issue] = field(default_factory=list)
     root_log_issues: list[Issue] = field(default_factory=list)
-

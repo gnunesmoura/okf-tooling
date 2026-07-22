@@ -22,28 +22,43 @@ def run_show(args: Namespace) -> int:
     except ConceptResolutionError as error:
         return _emit_error(args, "okf.show", error.code, error.message, error.details)
 
+    profile = getattr(args, "profile", "brief" if getattr(args, "summary", False) else "normal")
+    concept_data = concept_payload(concept)
     payload = {
         "ok": True,
         "command": "okf.show",
         "bundle": bundle_payload(bundle),
-        "data": concept_payload(concept),
+        "data": {"profile": profile, **_filter_show_concept(concept_data, profile)},
         "issues": [issue_payload(issue) for issue in bundle.issues],
     }
     if getattr(args, "json", False):
         print(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
         return 0
 
-    print(_render_show_output(payload["data"], getattr(args, "summary", False)))
+    print(_render_show_output(concept_data, profile))
     return 0
 
 
-def _render_show_output(data: dict[str, Any], summary: bool) -> str:
+def _filter_show_concept(c: dict[str, Any], profile: str) -> dict[str, Any]:
+    if profile == "brief":
+        fields = ("concept_id", "title", "description", "type", "tags", "relative_path")
+    else:
+        return dict(c)
+    return {field: c[field] for field in fields}
+
+
+def _render_show_output(data: dict[str, Any], profile: str) -> str:
     lines = [_render_concept_header(data)]
     if data["description"]:
         lines.append(f"description: {data['description']}")
     if data["tags"]:
         lines.append(f"tags: {', '.join(data['tags'])}")
-    if not summary and data["body"]:
+    if profile == "full":
+        frontmatter = data.get("frontmatter", {})
+        if frontmatter:
+            lines.extend(["", "Frontmatter"])
+            lines.extend(f"{key}: {frontmatter[key]}" for key in sorted(frontmatter))
+    if profile != "brief" and data["body"]:
         lines.extend(["", data["body"]])
     if data["issues"]:
         lines.extend(["", "Issues"])

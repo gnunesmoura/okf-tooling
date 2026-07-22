@@ -8,13 +8,20 @@ tags: [command, tree]
 # `tree`
 
 ```text
-mira-okf tree docs --depth <n> [--summary] [--json]
+mira-okf tree docs --depth <n> [--profile {brief,normal,full}] [--summary] [--json]
 ```
 
-`--depth` defaults to `2`. Human-readable output is a compact, depth-respecting
-directory tree by default. With `--summary`, the same compact tree also shows
-applicable `index.md` and `log.md` presence, `concepts: N`, and `reserved: N`
-metadata for each directory. JSON output always includes the complete
-structured directory data, regardless of `--summary`; the flag does not reduce
-or reshape the JSON payload. Bundle discovery and the command's read-only
-scope are unchanged.
+`--depth` defaults to `2`; `--profile` defaults to `normal`. `--summary` is an
+alias for `--profile brief`. If both options are supplied, `--summary` wins and
+the active profile is `brief`.
+
+| Profile | Human output | JSON concept fields |
+| --- | --- | --- |
+| `brief` | `<path>index  <index_title>` when available, then one indented title-only line per concept | `concept_id`, `title` |
+| `normal` | The directory line, then one indented `concept_id  type  title  description` line per concept; description is optional | `concept_id`, `title`, `type`, `description` |
+| `full` | The normal concept line plus sorted `key: value` frontmatter lines indented beneath it | All concept fields except `body` |
+
+Tree JSON includes `data.profile` with the active profile. Directory structure
+metadata, including nullable `index_title`, remains in the directory objects.
+Directories without a usable index title retain only their path line. Tree
+never emits concept bodies. Directory and concept ordering is deterministic.

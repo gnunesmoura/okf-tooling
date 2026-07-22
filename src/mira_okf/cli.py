@@ -39,7 +39,7 @@ def build_parser() -> argparse.ArgumentParser:
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     for name, help_text, arguments in (
-        ("tree", "Show a summarized bundle tree.", (("--depth", {"type": int, "default": 2}), ("--summary", {"action": "store_true"}), ("--json", {"action": "store_true"}))),
+        ("tree", "Show a summarized bundle tree.", (("--depth", {"type": int, "default": 2}), ("--profile", {"choices": ("brief", "normal", "full"), "default": "normal"}), ("--summary", {"action": "store_true"}), ("--json", {"action": "store_true"}))),
         (
             "list",
             "List concepts in a bundle.",
@@ -48,10 +48,11 @@ def build_parser() -> argparse.ArgumentParser:
                 ("--tag", {}),
                 ("--offset", {"type": _non_negative_int, "default": 0}),
                 ("--limit", {"type": _non_negative_int}),
+                ("--profile", {"choices": ("brief", "normal", "full"), "default": "normal"}),
                 ("--json", {"action": "store_true"}),
             ),
         ),
-        ("show", "Show a single concept.", (("--summary", {"action": "store_true"}), ("--json", {"action": "store_true"}))),
+        ("show", "Show a single concept.", (("--profile", {"choices": ("brief", "normal", "full"), "default": "normal"}), ("--summary", {"action": "store_true"}), ("--json", {"action": "store_true"}))),
         ("links", "List outbound links in a bundle.", (("--broken", {"action": "store_true"}), ("--external", {"action": "store_true"}), ("--json", {"action": "store_true"}))),
         ("backlinks", "List inbound links for a concept.", (("--json", {"action": "store_true"}),)),
         ("validate", "Validate bundle conformance.", (("--json", {"action": "store_true"}),)),
@@ -74,6 +75,8 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: Sequence[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
+    if args.command in {"tree", "show"} and args.summary:
+        args.profile = "brief"
     if args.command == "show" and args.bundle is None and args.concept is None:
         parser.error("the following arguments are required: concept")
     handler = getattr(args, "handler", None)
